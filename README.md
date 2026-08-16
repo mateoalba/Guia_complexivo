@@ -812,6 +812,99 @@ Muchas versiones recientes de `create-expo-app` generan por defecto un proyecto 
    npx expo start -c
    ```
 
+#### 📄 Los 3 archivos ya limpios, listos para copiar-pegar
+
+**`package.json`** — solo cambia la línea `"main"`, el resto queda igual a lo que genera Expo (no borres ninguna dependencia salvo `expo-router`, que desaparece sola con el `npm uninstall`):
+```json
+{
+  "name": "mi-proyecto-rn",
+  "main": "index.js",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~57.0.13",
+    "expo-splash-screen": "~57.0.6",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.2",
+    "@react-navigation/native": "^7.3.16",
+    "@react-navigation/native-stack": "^7.18.8",
+    "react-native-screens": "~4.26.0",
+    "react-native-safe-area-context": "~5.7.0",
+    "@react-native-picker/picker": "2.11.4",
+    "axios": "^1.19.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  },
+  "private": true
+}
+```
+⚠️ Este es un ejemplo reducido — tu `package.json` real va a tener más dependencias (`expo-constants`, `expo-font`, etc.) que trae Expo por defecto. **No las borres**, solo asegúrate de que `expo-router` no esté en la lista y que `"main"` diga `"index.js"`.
+
+**`index.js`** (nuevo, en la raíz del proyecto, junto a `package.json`):
+```javascript
+import { registerRootComponent } from 'expo';
+import App from './App';
+
+registerRootComponent(App);
+```
+
+**`app.json`** — quita `"expo-router"` de plugins, quita `"experiments"` completo, cambia `web.output`:
+```json
+{
+  "expo": {
+    "name": "mi-proyecto-rn",
+    "slug": "mi-proyecto-rn",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "miproyectorn",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "icon": "./assets/expo.icon"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#208AEF",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 76
+        }
+      ]
+    ]
+  }
+}
+```
+
+**Orden recomendado para aplicar los 3 cambios sin liarte:**
+1. Borra `src/app/`, `src/hooks/`, `src/constants/`.
+2. Edita `app.json` (plugins + experiments + web.output) — cópialo tal cual de arriba, solo ajustando `name`/`slug`/`scheme` a tu proyecto.
+3. Edita `package.json`, cambia solo `"main"`.
+4. Crea `index.js` en la raíz.
+5. `npm uninstall expo-router`.
+6. `npx expo start -c` — si falla igual, aplica la limpieza completa de `node_modules` del punto 7.
+
 ### 3.3 `src/config.ts` — la URL cambia según dónde pruebes
 
 ```typescript
