@@ -1001,6 +1001,198 @@ const [selectedEventType, setSelectedEventType] = useState<string>(EVENT_TYPES[0
 </Picker>
 ```
 
+**Si en tu caso uno de los dos campos es un `ChoiceField` fijo en vez de otra colección**, ese Picker cambia a estático:
+```typescriptreact
+const EVENT_TYPES = ["CREATED", "CONFIRMED", "CANCELLED"] as const;   // SCREAMING_SNAKE_CASE, valores copiados EXACTOS del backend
+const [selectedEventType, setSelectedEventType] = useState<string>(EVENT_TYPES[0]);   // se inicializa directo, sin esperar ninguna carga
+
+<Picker selectedValue={selectedEventType} onValueChange={(v) => setSelectedEventType(String(v))}>
+  {EVENT_TYPES.map((et) => <Picker.Item key={et} label={et} value={et} />)}
+</Picker>
+```
+
+### 3.6.1 ⚠️ La variante que más confunde: 1 Picker dinámico + Pickers FIJOS (no 2 dinámicos)
+
+El ejemplo de arriba (`VehicleServicesScreen`) es el caso especial donde **los dos** campos apuntan a algo real (Postgres y otra colección Mongo). Pero muchos negocios en realidad tienen una estructura distinta: **solo un campo** es una referencia real, y el resto son `ChoiceField` que tú mismo definiste en Django. Ejemplo típico — una colección `vehicle_events` (bitácora de eventos de un vehículo):
+
+```python
+# mongo_serializers.py — el serializer real que hay que leer ANTES de escribir la pantalla
+class VehicleEventSerializer(serializers.Serializer):
+    class EventType:                  # ← tiene CHOICES → es FIJO, sin API
+        CREATED = "CREATED"
+        CONFIRMED = "CONFIRMED"
+        CANCELLED = "CANCELLED"
+        CHOICES = [(CREATED, "Created"), (CONFIRMED, "Confirmed"), (CANCELLED, "Cancelled")]
+
+    class Source:                     # ← tiene CHOICES → es FIJO, sin API
+        WEB = "WEB"
+        MOBILE = "MOBILE"
+        SYSTEM = "SYSTEM"
+        CHOICES = [(WEB, "Web"), (MOBILE, "Mobile"), (SYSTEM, "System")]
+
+    vehiculo_id = serializers.IntegerField()          # ← SIN choices → referencia real a Postgres
+    event_type = serializers.ChoiceField(choices=EventType.CHOICES)
+    source = serializers.ChoiceField(choices=Source.CHOICES)
+    note = serializers.CharField(required=False, allow_blank=True)
+    created_at = serializers.DateTimeField(required=False)
+```
+
+**Diagnóstico (hazlo SIEMPRE antes de escribir el primer Picker):** cuenta cuántos campos del serializer tienen `ChoiceField(choices=...)` (van fijos) vs cuántos son `IntegerField()`/`CharField()` simples apuntando a una tabla/colección real (van dinámicos, con `list...Api()`). Aquí: **1 dinámico** (`vehiculo_id`), **2 fijos** (`event_type`, `source`).
+
+```typescriptreact
+// screens/VehicleEventsScreen.tsx
+import { useEffect, useState } from "react";
+import { View, Text, TextInput, Pressable, FlatList, StyleSheet } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+
+import { listVehiculosApi } from "../api/vehiculos.api";
+import { listVehicleEventsApi, createVehicleEventApi, deleteVehicleEventApi } from "../api/vehicleEvents.api";
+
+import type { Vehiculo } from "../types/vehiculo";
+import type { VehicleEvent } from "../types/vehicleEvent";
+import { toArray } from "../types/drf";
+
+// Constantes FIJAS — copiadas EXACTAS del EventType/Source de Django. Nunca vienen de una API.
+const EVENT_TYPES = ["CREATED", "CONFIRMED", "CANCELLED"] as const;
+const SOURCES = ["WEB", "MOBILE", "SYSTEM"] as const;
+
+function vehiculoLabel(v: Vehiculo): string {
+  return v.placa;   // el campo que mejor identifica al vehículo en una lista
+}
+
+export default function VehicleEventsScreen() {
+  const [items, setItems] = useState<VehicleEvent[]>([]);
+  const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);   // solo ESTE array viene de una API
+
+  const [selectedVehiculoId, setSelectedVehiculoId] = useState<number | null>(null);
+  const [selectedEventType, setSelectedEventType] = useState<string>(EVENT_TYPES[0]);  // se inicializa directo
+  const [selectedSource, setSelectedSource] = useState<string>(SOURCES[0]);            // se inicializa directo
+
+  const [notes, setNotes] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const loadAll = async (): Promise<void> => {
+    try {
+      setErrorMessage("");
+      // Promise.all con SOLO 2 llamadas (no 3) — porque solo hay UNA fuente externa además del listado
+      const [eventsData, vehiculosData] = await Promise.all([
+        listVehicleEventsApi(),
+        listVehiculosApi(),
+      ]);
+      const eventsList = toArray(eventsData);
+      const vehiculosList = toArray(vehiculosData);
+
+      setItems(eventsList);
+      setVehiculos(vehiculosList);
+
+      if (selectedVehiculoId === null && vehiculosList.length) {
+        setSelectedVehiculoId(vehiculosList[0].id);
+      }
+    } catch {
+      setErrorMessage("No se pudo cargar info. ¿Token? ¿backend encendido?");
+    }
+  };
+
+  useEffect(() => { loadAll(); }, []);
+
+  const createItem = async (): Promise<void> => {
+    try {
+      setErrorMessage("");
+      if (selectedVehiculoId === null) return setErrorMessage("Seleccione un vehículo");
+
+      // NO enviar created_at, el backend la asigna con datetime.now()
+      const created = await createVehicleEventApi({
+        vehiculo_id: selectedVehiculoId,
+        event_type: selectedEventType,
+        source: selectedSource,
+        note: notes.trim() || undefined,
+      });
+
+      setItems((prev) => [created, ...prev]);
+      setNotes("");
+    } catch {
+      setErrorMessage("No se pudo crear el evento");
+    }
+  };
+
+  const removeItem = async (id: string): Promise<void> => {
+    try {
+      await deleteVehicleEventApi(id);
+      setItems((prev) => prev.filter((it) => it.id !== id));
+    } catch {
+      setErrorMessage("No se pudo eliminar el evento");
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <View>
+            <Text style={styles.title}>Eventos de Vehículo</Text>
+            {!!errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
+
+            {/* Picker 1: DINÁMICO — el único que viene de una API real */}
+            <Text style={styles.label}>Vehículo</Text>
+            <Picker selectedValue={selectedVehiculoId ?? ""} onValueChange={(v) => setSelectedVehiculoId(Number(v))}>
+              {vehiculos.map((v) => <Picker.Item key={v.id} label={vehiculoLabel(v)} value={v.id} />)}
+            </Picker>
+
+            {/* Picker 2: FIJO — .map() sobre la constante, SIN ninguna llamada HTTP */}
+            <Text style={styles.label}>Tipo de evento</Text>
+            <Picker selectedValue={selectedEventType} onValueChange={(v) => setSelectedEventType(String(v))}>
+              {EVENT_TYPES.map((et) => <Picker.Item key={et} label={et} value={et} />)}
+            </Picker>
+
+            {/* Picker 3: FIJO — mismo patrón */}
+            <Text style={styles.label}>Fuente</Text>
+            <Picker selectedValue={selectedSource} onValueChange={(v) => setSelectedSource(String(v))}>
+              {SOURCES.map((s) => <Picker.Item key={s} label={s} value={s} />)}
+            </Picker>
+
+            <TextInput placeholder="Notas" value={notes} onChangeText={setNotes} style={styles.input} />
+            <Pressable onPress={createItem} style={styles.btn}><Text style={styles.btnText}>Crear</Text></Pressable>
+            <Pressable onPress={loadAll} style={styles.btn}><Text style={styles.btnText}>Refrescar</Text></Pressable>
+          </View>
+        }
+        renderItem={({ item }) => (
+          <View style={styles.row}>
+            <Text>Vehículo ID: {item.vehiculo_id} — {item.event_type}</Text>
+            <Pressable onPress={() => removeItem(item.id)}><Text style={styles.del}>Eliminar</Text></Pressable>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#0d1117", padding: 16 },
+  title: { color: "#58a6ff", fontSize: 22, fontWeight: "800", marginBottom: 10 },
+  error: { color: "#ff7b72", marginBottom: 10 },
+  label: { color: "#8b949e", marginBottom: 6 },
+  input: { backgroundColor: "#161b22", color: "#c9d1d9", padding: 12, borderRadius: 8, marginBottom: 10, borderWidth: 1, borderColor: "#30363d" },
+  btn: { backgroundColor: "#21262d", borderColor: "#58a6ff", borderWidth: 1, padding: 12, borderRadius: 8, marginBottom: 12 },
+  btnText: { color: "#58a6ff", textAlign: "center", fontWeight: "700" },
+  row: { backgroundColor: "#161b22", padding: 12, borderRadius: 8, marginBottom: 10, flexDirection: "row", justifyContent: "space-between" },
+  del: { color: "#ff7b72", fontWeight: "700" },
+});
+```
+
+#### 🔑 Tabla comparativa — cuál de los dos patrones usar
+
+| | 3.6 `VehicleServicesScreen` (2 dinámicos) | 3.6.1 `VehicleEventsScreen` (1 dinámico + 2 fijos) |
+|---|---|---|
+| ¿Cuántas llamadas en `Promise.all`? | 3 (`listVehicleServicesApi`, `listVehiculosApi`, `listServiceTypesApi`) | 2 (`listVehicleEventsApi`, `listVehiculosApi`) |
+| Segundo campo del serializer | `CharField()` apuntando a OTRA colección Mongo real | `ChoiceField(choices=...)` |
+| ¿Existe una función `list<Segundo>Api()`? | Sí, para el catálogo Mongo aparte | No — no hace falta, son valores fijos |
+| Se inicializa con | `useState<string>("")`, se llena tras la carga | `useState<string>(CONSTANTE[0])`, ya tiene valor desde el inicio |
+| Origen de las opciones del Picker | `.map()` sobre un `useState` que llena `loadAll()` | `.map()` sobre un array `as const` escrito arriba del archivo |
+
+**La pregunta que resuelve la confusión, siempre:** abre tu propio `mongo_serializers.py` de la colección que vas a construir, y por cada campo (menos `note`/fechas) pregúntate *"¿esto tiene `ChoiceField(choices=...)`, o es un `IntegerField`/`CharField` simple apuntando a algo real?"* — el conteo de cada tipo te dice exactamente cuántos Pickers de cada clase necesitas. No asumas que el número de Pickers dinámicos es siempre 2 solo porque el primer ejemplo que viste tenía esa forma.
+
 ### 3.7 `App.tsx` móvil
 
 ```typescriptreact
