@@ -65,7 +65,7 @@
     align-items:center;
     gap:20px;
     padding:18px 32px;
-    background:linear-gradient(100deg,var(--blue-dark) 0%,var(--navy) 60%,var(--navy-deep) 100%);
+    background:var(--blue);
     border-bottom:4px solid var(--blue-light);
     position:sticky;
     top:0;
@@ -74,12 +74,18 @@
   .topbar .badge{
     width:58px;height:58px;border-radius:50%;
     border:3px solid #fff;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    display:flex;align-items:center;justify-content:center;
     flex-shrink:0;
     color:#fff;
+    position:relative;
   }
-  .topbar .badge .b-main{font-family:'Space Grotesk';font-weight:700;font-size:16px;line-height:1;}
-  .topbar .badge .b-sub{font-size:7px;font-weight:600;letter-spacing:.05em;margin-top:1px;}
+  .topbar .badge .b-main{font-family:'Space Grotesk';font-weight:700;font-size:14px;line-height:1;letter-spacing:.01em;}
+  .topbar .badge .b-ec{
+    position:absolute;top:-6px;right:-10px;
+    font-size:9px;font-weight:700;color:#fff;
+    background:transparent;
+    letter-spacing:.02em;
+  }
   .topbar .title{font-family:'Space Grotesk';font-weight:700;color:#fff;font-size:21px;line-height:1.25;}
   .topbar .subtitle{color:#cfe4f7;font-size:12.5px;margin-top:3px;display:none;}
   @media(min-width:700px){.topbar .subtitle{display:block;}}
@@ -311,12 +317,11 @@
 
 <div class="topbar">
   <div class="badge">
-    <span class="b-main">GM</span>
-    <span class="b-sub">GUIA</span>
+    <span class="b-main">UTE</span>
+    <span class="b-ec">EC</span>
   </div>
   <div>
-    <div class="title">Guía Maestra — Examen Complexivo (Django + Postgres + Mongo + React + RN)</div>
-    <div class="subtitle">Nomenclatura de referencia: Vehículos (Marca / Vehiculo) — adapta los nombres al negocio del día</div>
+    <div class="title">EXAMEN Backend Django REST + PostgreSQL + JWT + MongoDB (sin Docker)</div>
   </div>
   <div class="search-wrap">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
