@@ -1,0 +1,14 @@
+CREATE USER cine_user WITH PASSWORD 'admin123';
+CREATE DATABASE cine_db OWNER cine_user;
+
+\c cine_db
+
+ALTER SCHEMA public OWNER TO cine_user;
+GRANT ALL ON SCHEMA public TO cine_user;
+GRANT CREATE ON SCHEMA public TO cine_user;
+
+ALTER DEFAULT PRIVILEGES FOR USER cine_user IN SCHEMA public GRANT ALL ON TABLES TO cine_user;
+ALTER DEFAULT PRIVILEGES FOR USER cine_user IN SCHEMA public GRANT ALL ON SEQUENCES TO cine_user;
+ALTER DEFAULT PRIVILEGES FOR USER cine_user IN SCHEMA public GRANT ALL ON FUNCTIONS TO cine_user;
+
+\q
