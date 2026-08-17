@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Maestra — Examen Complexivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-dark:#0a4a80;
+    --blue:#0e5a99;
+    --blue-light:#4fc3f7;
+    --navy:#0d3f6b;
+    --navy-deep:#0a2f52;
+    --bg:#ffffff;
+    --bg-page:#f7f9fb;
+    --sidebar-bg:#ffffff;
+    --border:#e3e8ee;
+    --text:#1f2937;
+    --text-dim:#6b7280;
+    --text-h:#0d3f6b;
+    --accent:#0e5a99;
+    --accent-soft:#e8f2fc;
+    --warn:#b26a00;
+    --warn-soft:#fff4e0;
+    --danger:#b3261e;
+    --danger-soft:#fdecea;
+    --ok:#1e7e34;
+    --ok-soft:#e8f7ee;
+    --radius:10px;
+    --sidebar-w:280px;
+    --topbar-h:96px;
+    --tabs-h:64px;
+    --code-bg:#0c1420;
+    --code-bg2:#0a111c;
+    --code-text:#dbe4ee;
+    --code-border:#1c2c3d;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg-page);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:15px;
+    line-height:1.65;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    color:var(--text-h);
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  code, pre, .mono{
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+  }
+  a{color:var(--accent);}
+
+  /* ---------- TOPBAR ---------- */
+  .topbar{
+    min-height:var(--topbar-h);
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:18px 32px;
+    background:linear-gradient(100deg,var(--blue-dark) 0%,var(--navy) 60%,var(--navy-deep) 100%);
+    border-bottom:4px solid var(--blue-light);
+    position:sticky;
+    top:0;
+    z-index:50;
+  }
+  .topbar .badge{
+    width:58px;height:58px;border-radius:50%;
+    border:3px solid #fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    flex-shrink:0;
+    color:#fff;
+  }
+  .topbar .badge .b-main{font-family:'Space Grotesk';font-weight:700;font-size:16px;line-height:1;}
+  .topbar .badge .b-sub{font-size:7px;font-weight:600;letter-spacing:.05em;margin-top:1px;}
+  .topbar .title{font-family:'Space Grotesk';font-weight:700;color:#fff;font-size:21px;line-height:1.25;}
+  .topbar .subtitle{color:#cfe4f7;font-size:12.5px;margin-top:3px;display:none;}
+  @media(min-width:700px){.topbar .subtitle{display:block;}}
+  .search-wrap{margin-left:auto;position:relative;width:min(240px,32vw);flex-shrink:0;}
+  .search-wrap input{
+    width:100%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
+    color:#fff;padding:8px 12px 8px 32px;border-radius:8px;font-size:13px;font-family:inherit;
+  }
+  .search-wrap input::placeholder{color:#d7e7f5;}
+  .search-wrap input:focus{outline:none;border-color:#fff;background:rgba(255,255,255,.22);}
+  .search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.85;pointer-events:none;stroke:#fff;}
+
+  /* ---------- TABS (píldoras) ---------- */
+  .tabs{
+    display:flex;
+    gap:10px;
+    padding:16px 32px;
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+    overflow-x:auto;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    background:var(--navy);border:none;color:#fff;
+    font-family:'Space Grotesk';font-weight:600;font-size:13.5px;
+    padding:11px 20px;cursor:pointer;white-space:nowrap;
+    border-radius:8px;
+    display:flex;align-items:center;gap:7px;
+    transition:background .15s, transform .1s;
+  }
+  .tab-btn:hover{background:var(--blue-dark);transform:translateY(-1px);}
+  .tab-btn.active{background:var(--blue);box-shadow:0 3px 10px rgba(14,90,153,.35);}
+  .tab-btn .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);}
+  .tab-btn.active .dot{background:var(--blue-light);}
+
+  /* ---------- LAYOUT ---------- */
+  .layout{display:flex;max-width:1400px;margin:0 auto;background:var(--bg);}
+  .sidebar{
+    width:var(--sidebar-w);
+    flex-shrink:0;
+    position:sticky;
+    top:calc(var(--topbar-h) + 12px);
+    height:calc(100vh - var(--topbar-h) - 24px);
+    overflow-y:auto;
+    padding:24px 14px 40px 24px;
+    display:none;
+    background:var(--sidebar-bg);
+    border-right:1px solid var(--border);
+  }
+  @media(min-width:900px){.sidebar{display:block;}}
+  .sidebar::-webkit-scrollbar{width:6px;}
+  .sidebar::-webkit-scrollbar-thumb{background:#d6dde5;border-radius:3px;}
+  .toc-eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--navy);font-weight:700;margin:0 0 12px 8px;padding-bottom:8px;border-bottom:2px solid var(--blue-light);}
+  .toc-link{
+    display:block;padding:8px 10px;border-radius:7px;color:#374151;
+    text-decoration:none;font-size:13.5px;margin-bottom:2px;border-left:3px solid transparent;
+    transition:background .12s,color .12s;
+  }
+  .toc-link:hover{background:#f2f6fa;color:var(--navy);}
+  .toc-link.active{background:var(--accent-soft);color:var(--blue);border-left-color:var(--blue);font-weight:600;}
+
+  .content{
+    flex:1;
+    min-width:0;
+    padding:32px 24px 120px;
+    background:var(--bg);
+  }
+  @media(min-width:900px){.content{padding:38px 48px 140px;}}
+  .content-inner{max-width:840px;}
+
+  .panel{display:none;}
+  .panel.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+  section.doc{scroll-margin-top:180px;margin-bottom:44px;}
+  section.doc h2{
+    font-size:23px;margin:0 0 4px;display:flex;align-items:center;gap:10px;
+    padding-bottom:12px;border-bottom:1px solid var(--border);
+  }
+  section.doc h2 .num{
+    font-family:'JetBrains Mono';font-size:13px;color:#fff;
+    background:var(--blue);padding:3px 9px;border-radius:6px;font-weight:600;
+  }
+  section.doc h3{font-size:16.5px;margin:26px 0 10px;color:var(--blue-dark);}
+  section.doc h4{font-size:13px;margin:18px 0 8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;font-weight:700;}
+  section.doc p{color:var(--text);margin:0 0 14px;}
+  .lede{color:var(--text-dim);font-size:14px;margin:10px 0 20px;}
+
+  /* callout pills (como "Tiempo objetivo: 90 minutos") */
+  .pillbar{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 20px;}
+  .pillbar .pillitem{
+    background:var(--accent-soft);color:var(--blue-dark);font-size:12.5px;font-weight:600;
+    padding:8px 16px;border-radius:20px;font-style:italic;
+  }
+
+  /* callouts */
+  .callout{
+    border-radius:var(--radius);padding:13px 16px;margin:16px 0;font-size:13.5px;
+    border:1px solid; display:flex; gap:10px; align-items:flex-start;
+    border-left-width:4px;
+  }
+  .callout .ic{flex-shrink:0;margin-top:1px;}
+  .callout.warn{background:var(--warn-soft);border-color:#f0d9a8;border-left-color:var(--warn);color:#7a4a00;}
+  .callout.tip{background:var(--accent-soft);border-color:#bcdcf7;border-left-color:var(--blue);color:#0a4a80;}
+  .callout.danger{background:var(--danger-soft);border-color:#f3c6c2;border-left-color:var(--danger);color:#7a1d16;}
+  .callout b{color:inherit;}
+
+  /* code blocks — se quedan oscuros, dan contraste sobre el fondo blanco */
+  .code-wrap{position:relative;margin:16px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--code-border);box-shadow:0 4px 14px rgba(13,63,107,.08);}
+  .code-head{
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--code-bg2);padding:8px 14px;font-size:11.5px;color:#8fa3b8;
+    font-family:'JetBrains Mono';border-bottom:1px solid var(--code-border);
+  }
+  .copy-btn{
+    background:#fff;border:1px solid #cfd9e3;color:#374151;
+    font-size:11.5px;padding:4px 11px;border-radius:6px;cursor:pointer;font-family:'Inter';font-weight:600;
+    display:flex;align-items:center;gap:5px;
+  }
+  .copy-btn:hover{color:var(--blue);border-color:var(--blue);}
+  .copy-btn.copied{color:var(--ok);border-color:var(--ok);background:var(--ok-soft);}
+  pre{
+    margin:0;padding:16px 18px;overflow-x:auto;background:var(--code-bg);
+    font-size:12.8px;line-height:1.65;
+  }
+  pre code{color:var(--code-text);}
+  .tok-kw{color:#ff8a80;} .tok-str{color:#8bd17c;} .tok-com{color:#7189a0;font-style:italic;}
+  .tok-fn{color:#5eb3ff;} .tok-num{color:#f5c563;} .tok-cls{color:#c9a4ff;}
+
+  /* tables */
+  table.ref{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  table.ref th{
+    background:var(--navy);color:#fff;text-align:left;
+    padding:9px 12px;font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;
+  }
+  table.ref td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;background:#fff;}
+  table.ref tr:nth-child(even) td{background:#fafbfd;}
+  table.ref tr:last-child td{border-bottom:none;}
+  table.ref code{background:var(--accent-soft);padding:1px 6px;border-radius:4px;font-size:12px;color:var(--blue-dark);}
+
+  /* checklist */
+  .checklist{list-style:none;padding:0;margin:16px 0;}
+  .checklist li{
+    display:flex;gap:10px;align-items:flex-start;padding:9px 4px;font-size:13.5px;
+    border-bottom:1px solid var(--border);
+  }
+  .checklist input[type=checkbox]{margin-top:3px;accent-color:var(--blue);width:16px;height:16px;flex-shrink:0;cursor:pointer;}
+  .checklist label{cursor:pointer;color:var(--text);}
+  .checklist code{background:var(--accent-soft);color:var(--blue-dark);padding:1px 5px;border-radius:4px;}
+
+  /* comparison cards */
+  .cmp-grid{display:grid;grid-template-columns:1fr;gap:14px;margin:18px 0;}
+  @media(min-width:700px){.cmp-grid{grid-template-columns:1fr 1fr;}}
+  .cmp-card{border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;background:#fafbfd;}
+  .cmp-card h4{margin-top:0;color:var(--navy);text-transform:none;letter-spacing:0;font-size:13.5px;display:flex;align-items:center;gap:7px;}
+  .cmp-card ul{margin:8px 0 0;padding-left:18px;font-size:12.8px;color:var(--text-dim);}
+  .cmp-card li{margin-bottom:5px;}
+  .pill{display:inline-block;font-size:10.5px;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:.02em;}
+  .pill.dyn{background:var(--accent-soft);color:var(--blue-dark);}
+  .pill.fix{background:var(--warn-soft);color:var(--warn);}
+
+  /* step numbers */
+  .steps{counter-reset:step;padding:0;list-style:none;margin:18px 0;}
+  .steps li{
+    position:relative;padding-left:36px;margin-bottom:16px;font-size:13.5px;color:var(--text);
+  }
+  .steps li::before{
+    counter-increment:step;content:counter(step);
+    position:absolute;left:0;top:0;width:24px;height:24px;border-radius:7px;
+    background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-size:11.5px;font-weight:700;
+  }
+
+  .empty-tab{padding:70px 20px;text-align:center;color:var(--text-dim);border:1px dashed var(--border);border-radius:12px;background:#fafbfd;}
+  .empty-tab .big{font-size:15px;color:var(--text);margin-bottom:8px;font-weight:600;}
+
+  /* diagnostic tool (signature element) */
+  .diag-tool{
+    border:1px solid var(--border);border-radius:14px;
+    background:linear-gradient(160deg,#f4f9fe,#ffffff);
+    padding:22px 24px;margin:20px 0 30px;
+    box-shadow:0 4px 18px rgba(13,63,107,.06);
+  }
+  .diag-tool .diag-head{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
+  .diag-tool .diag-head .ic{
+    width:34px;height:34px;border-radius:9px;background:var(--blue);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;
+  }
+  .diag-tool h3{margin:0;font-size:16px;color:var(--navy);}
+  .diag-tool .diag-sub{color:var(--text-dim);font-size:12.8px;margin:4px 0 18px;}
+  .field-row{
+    display:flex;gap:8px;align-items:center;background:#fff;
+    border:1px solid var(--border);border-radius:9px;padding:9px 11px;margin-bottom:9px;
+  }
+  .field-row input[type=text]{
+    flex:1;background:none;border:none;color:var(--text);font-family:'JetBrains Mono';font-size:12.5px;
+  }
+  .field-row input[type=text]:focus{outline:none;}
+  .field-row input[type=text]::placeholder{color:#a3adba;}
+  .toggle-btns{display:flex;gap:4px;flex-shrink:0;}
+  .toggle-btn{
+    font-size:11px;padding:6px 11px;border-radius:6px;border:1px solid var(--border);
+    background:#f7f9fb;color:var(--text-dim);cursor:pointer;font-family:'Inter';font-weight:600;
+  }
+  .toggle-btn[data-active=true][data-type=dyn]{background:var(--accent-soft);color:var(--blue);border-color:var(--blue);}
+  .toggle-btn[data-active=true][data-type=fix]{background:var(--warn-soft);color:var(--warn);border-color:var(--warn);}
+  .rm-field{background:none;border:none;color:#a3adba;cursor:pointer;font-size:16px;padding:2px 6px;flex-shrink:0;}
+  .rm-field:hover{color:var(--danger);}
+  .add-field-btn{
+    width:100%;padding:10px;border-radius:9px;border:1px dashed #b9c6d3;background:none;
+    color:var(--text-dim);cursor:pointer;font-size:12.5px;font-family:'Inter';margin-bottom:16px;font-weight:600;
+  }
+  .add-field-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--accent-soft);}
+  .diag-result{
+    border-radius:9px;padding:15px 17px;font-size:13px;background:#fff;
+    border:1px solid var(--border);
+  }
+  .diag-result b{color:var(--navy);}
+  .diag-result .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);gap:10px;}
+  .diag-result .row:last-child{border-bottom:none;}
+
+  footer.page-footer{
+    max-width:1400px;margin:0 auto;padding:30px 44px 60px;color:var(--text-dim);font-size:12px;
+    border-top:1px solid var(--border);background:var(--bg);
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="badge">
+    <span class="b-main">GM</span>
+    <span class="b-sub">GUIA</span>
+  </div>
+  <div>
+    <div class="title">Guía Maestra — Examen Complexivo (Django + Postgres + Mongo + React + RN)</div>
+    <div class="subtitle">Nomenclatura de referencia: Vehículos (Marca / Vehiculo) — adapta los nombres al negocio del día</div>
+  </div>
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <input id="searchBox" type="text" placeholder="Buscar en la guía…">
+  </div>
+</div>
+
+<div class="tabs" id="tabsBar">
+  <button class="tab-btn active" data-tab="backend"><span class="dot"></span>Backend Django</button>
+  <button class="tab-btn" data-tab="frontend"><span class="dot"></span>Frontend React</button>
+  <button class="tab-btn" data-tab="mobile"><span class="dot"></span>Mobile React Native</button>
+  <button class="tab-btn" data-tab="bd"><span class="dot"></span>Base de Datos</button>
+  <button class="tab-btn" data-tab="utiles"><span class="dot"></span>Útiles</button>
+</div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="content">
+    <div class="content-inner">
+
+      <!-- ======================= PANEL: BACKEND ======================= -->
+      <div class="panel active" id="panel-backend">
+
+        <section class="doc" id="b-0">
+          <h2><span class="num">0</span>Antes de escribir una sola línea</h2>
+          <div class="pillbar">
+            <span class="pillitem">Backend objetivo: 60-70 min</span>
+            <span class="pillitem">Frontend: 45-55 min</span>
+            <span class="pillitem">Móvil: 40-50 min</span>
+            <span class="pillitem">Total examen: 4 horas</span>
+          </div>
+          <p class="lede">Por cada tabla/colección que te den en el enunciado, identifica esto primero:</p>
+          <ol class="steps">
+            <li>¿Es un <b>catálogo</b> (como <code>Marca</code>) o una <b>entidad transaccional</b> (como <code>Vehiculo</code>, con FK al catálogo)?</li>
+            <li>En Mongo, ¿la colección de "bitácora" tiene un campo que referencia al catálogo Postgres (como <code>fleet_logs.vehicle_id</code>), o es <b>independiente</b> (como <code>airlines</code>, sin ninguna FK)?</li>
+            <li>¿Qué campos son literalmente obligatorios (<code>NOT NULL</code> sin default) vs opcionales (con default, o explícitamente opcionales en el enunciado)?</li>
+            <li>Copia los <b>nombres de choices exactos</b> del enunciado (mayúsculas, ortografía) — nunca los escribas de memoria.</li>
+          </ol>
+        </section>
+
+        <section class="doc" id="b-1">
+          <h2><span class="num">1</span>PostgreSQL — arranque</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>bash — Ubuntu</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>sudo systemctl status postgresql
+sudo systemctl start postgresql      <span class="tok-com"># si no está activo</span>
+
+sudo systemctl status mongod
+sudo systemctl start mongod          <span class="tok-com"># si no está activo</span>
+
+sudo -u postgres psql</code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>sql</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">CREATE USER</span> vehiculos_user <span class="tok-kw">WITH PASSWORD</span> <span class="tok-str">'admin123'</span>;
+<span class="tok-kw">CREATE DATABASE</span> vehiculos_db <span class="tok-kw">OWNER</span> vehiculos_user;
+
+\c vehiculos_db
+
+<span class="tok-kw">ALTER SCHEMA</span> public <span class="tok-kw">OWNER TO</span> vehiculos_user;
+<span class="tok-kw">GRANT ALL ON SCHEMA</span> public <span class="tok-kw">TO</span> vehiculos_user;
+<span class="tok-kw">GRANT CREATE ON SCHEMA</span> public <span class="tok-kw">TO</span> vehiculos_user;
+
+<span class="tok-kw">ALTER DEFAULT PRIVILEGES FOR USER</span> vehiculos_user <span class="tok-kw">IN SCHEMA</span> public <span class="tok-kw">GRANT ALL ON TABLES TO</span> vehiculos_user;
+<span class="tok-kw">ALTER DEFAULT PRIVILEGES FOR USER</span> vehiculos_user <span class="tok-kw">IN SCHEMA</span> public <span class="tok-kw">GRANT ALL ON SEQUENCES TO</span> vehiculos_user;
+<span class="tok-kw">ALTER DEFAULT PRIVILEGES FOR USER</span> vehiculos_user <span class="tok-kw">IN SCHEMA</span> public <span class="tok-kw">GRANT ALL ON FUNCTIONS TO</span> vehiculos_user;
+
+\q</code></pre>
+          </div>
+          <div class="callout tip"><span class="ic">💡</span><div>Si la rúbrica pide explícitamente "permisos mínimos, sin superusuario", eso es un <b>ejercicio de administración aparte</b> (pestaña Base de Datos) — el usuario que usa Django puede seguir siendo owner con <code>GRANT ALL</code>.</div></div>
+        </section>
+
+        <section class="doc" id="b-2">
+          <h2><span class="num">2</span>Proyecto Django</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>bash — Ubuntu</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>mkdir vehiculos_api
+<span class="tok-fn">cd</span> vehiculos_api
+python3 -m venv venv
+<span class="tok-fn">source</span> venv/bin/activate
+
+pip install django djangorestframework djangorestframework-simplejwt psycopg2-binary python-dotenv django-cors-headers django-filter pymongo
+
+django-admin startproject config .
+python manage.py startapp catalog</code></pre>
+          </div>
+          <div class="callout warn"><span class="ic">⚠️</span><div>El punto al final de <code>startproject config .</code> es obligatorio. Verifica el nombre real de la app con <code>ls</code> antes de escribir cualquier import.</div></div>
+        </section>
+
+        <section class="doc" id="b-3">
+          <h2><span class="num">3</span>.env</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>.env</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>DEBUG=1
+SECRET_KEY=dev-secret-key
+DB_NAME=vehiculos_db
+DB_USER=vehiculos_user
+DB_PASSWORD=admin123
+DB_HOST=127.0.0.1
+DB_PORT=5432
+
+MONGO_URI=mongodb://127.0.0.1:27017
+MONGO_DB=vehiculos_db
+
+CORS_ORIGIN=http://localhost:5173</code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="b-4">
+          <h2><span class="num">4</span>config/settings.py</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>python</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> pathlib <span class="tok-kw">import</span> Path
+<span class="tok-kw">import</span> os
+<span class="tok-kw">from</span> datetime <span class="tok-kw">import</span> timedelta
+<span class="tok-kw">from</span> dotenv <span class="tok-kw">import</span> load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / <span class="tok-str">".env"</span>)
+
+SECRET_KEY = os.getenv(<span class="tok-str">"SECRET_KEY"</span>, <span class="tok-str">"dev-secret-key"</span>)
+DEBUG = os.getenv(<span class="tok-str">"DEBUG"</span>, <span class="tok-str">"0"</span>) == <span class="tok-str">"1"</span>
+ALLOWED_HOSTS = [<span class="tok-str">"*"</span>]
+
+INSTALLED_APPS = [
+    <span class="tok-str">"django.contrib.admin"</span>,
+    <span class="tok-str">"django.contrib.auth"</span>,
+    <span class="tok-str">"django.contrib.contenttypes"</span>,
+    <span class="tok-str">"django.contrib.sessions"</span>,
+    <span class="tok-str">"django.contrib.messages"</span>,
+    <span class="tok-str">"django.contrib.staticfiles"</span>,
+    <span class="tok-str">"rest_framework"</span>,
+    <span class="tok-str">"django_filters"</span>,
+    <span class="tok-str">"corsheaders"</span>,
+    <span class="tok-str">"catalog"</span>,  <span class="tok-com"># nombre real de tu app</span>
+]
+
+MIDDLEWARE = [
+    <span class="tok-str">"corsheaders.middleware.CorsMiddleware"</span>,   <span class="tok-com"># SIEMPRE antes de CommonMiddleware</span>
+    <span class="tok-str">"django.middleware.common.CommonMiddleware"</span>,
+    <span class="tok-str">"django.middleware.security.SecurityMiddleware"</span>,
+    <span class="tok-str">"django.contrib.sessions.middleware.SessionMiddleware"</span>,
+    <span class="tok-str">"django.middleware.csrf.CsrfViewMiddleware"</span>,
+    <span class="tok-str">"django.contrib.auth.middleware.AuthenticationMiddleware"</span>,
+    <span class="tok-str">"django.contrib.messages.middleware.MessageMiddleware"</span>,
+    <span class="tok-str">"django.middleware.clickjacking.XFrameOptionsMiddleware"</span>,
+]
+
+ROOT_URLCONF = <span class="tok-str">"config.urls"</span>
+WSGI_APPLICATION = <span class="tok-str">"config.wsgi.application"</span>
+
+DATABASES = {
+    <span class="tok-str">"default"</span>: {
+        <span class="tok-str">"ENGINE"</span>: <span class="tok-str">"django.db.backends.postgresql"</span>,
+        <span class="tok-str">"NAME"</span>: os.getenv(<span class="tok-str">"DB_NAME"</span>),
+        <span class="tok-str">"USER"</span>: os.getenv(<span class="tok-str">"DB_USER"</span>),
+        <span class="tok-str">"PASSWORD"</span>: os.getenv(<span class="tok-str">"DB_PASSWORD"</span>),
+        <span class="tok-str">"HOST"</span>: os.getenv(<span class="tok-str">"DB_HOST"</span>, <span class="tok-str">"127.0.0.1"</span>),
+        <span class="tok-str">"PORT"</span>: os.getenv(<span class="tok-str">"DB_PORT"</span>, <span class="tok-str">"5432"</span>),
+    }
+}
+
+LANGUAGE_CODE = <span class="tok-str">"es-ec"</span>
+TIME_ZONE = <span class="tok-str">"America/Guayaquil"</span>
+USE_TZ = <span class="tok-kw">True</span>
+DEFAULT_AUTO_FIELD = <span class="tok-str">"django.db.models.BigAutoField"</span>
+
+REST_FRAMEWORK = {
+    <span class="tok-str">"DEFAULT_AUTHENTICATION_CLASSES"</span>: (<span class="tok-str">"rest_framework_simplejwt.authentication.JWTAuthentication"</span>,),
+    <span class="tok-str">"DEFAULT_PERMISSION_CLASSES"</span>: (<span class="tok-str">"rest_framework.permissions.IsAuthenticated"</span>,),
+    <span class="tok-str">"DEFAULT_PAGINATION_CLASS"</span>: <span class="tok-str">"rest_framework.pagination.PageNumberPagination"</span>,
+    <span class="tok-str">"PAGE_SIZE"</span>: <span class="tok-num">10</span>,
+    <span class="tok-str">"DEFAULT_FILTER_BACKENDS"</span>: [
+        <span class="tok-str">"django_filters.rest_framework.DjangoFilterBackend"</span>,
+        <span class="tok-str">"rest_framework.filters.SearchFilter"</span>,
+        <span class="tok-str">"rest_framework.filters.OrderingFilter"</span>,
+    ],
+}
+
+SIMPLE_JWT = {
+    <span class="tok-str">"ACCESS_TOKEN_LIFETIME"</span>: timedelta(minutes=<span class="tok-num">30</span>),
+    <span class="tok-str">"REFRESH_TOKEN_LIFETIME"</span>: timedelta(days=<span class="tok-num">7</span>),
+}
+
+<span class="tok-com"># Agrega TODOS los orígenes que vayas a usar: web (Vite=5173) Y Expo web (8081)</span>
+CORS_ALLOWED_ORIGINS = [
+    os.getenv(<span class="tok-str">"CORS_ORIGIN"</span>, <span class="tok-str">"http://localhost:5173"</span>),
+    <span class="tok-str">"http://127.0.0.1:5173"</span>,
+    <span class="tok-str">"http://localhost:8081"</span>,
+    <span class="tok-str">"http://127.0.0.1:8081"</span>,
+]
+
+MONGO_URI = os.getenv(<span class="tok-str">"MONGO_URI"</span>, <span class="tok-str">"mongodb://127.0.0.1:27017"</span>)
+MONGO_DB = os.getenv(<span class="tok-str">"MONGO_DB"</span>, <span class="tok-str">"vehiculos_db"</span>)  <span class="tok-com"># default correcto DESDE EL INICIO</span></code></pre>
+          </div>
+          <div class="callout tip"><span class="ic">💡</span><div><code>DEFAULT_PERMISSION_CLASSES = IsAuthenticated</code> cierra todo por defecto — cada excepción pública se declara a mano en la vista.</div></div>
+        </section>
+
+        <section class="doc" id="b-5">
+          <h2><span class="num">5</span>Modelos — catalog/models.py</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>python</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> django.db <span class="tok-kw">import</span> models
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">Marca</span>(models.Model):
+    nombre = models.CharField(max_length=<span class="tok-num">120</span>, unique=<span class="tok-kw">True</span>)
+
+    <span class="tok-kw">def</span> __str__(self):
+        <span class="tok-kw">return</span> self.nombre
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">Vehiculo</span>(models.Model):
+    <span class="tok-kw">class</span> <span class="tok-cls">Status</span>(models.TextChoices):        <span class="tok-com"># PascalCase para la clase</span>
+        RESERVED = <span class="tok-str">"RESERVED"</span>, <span class="tok-str">"Reserved"</span>    <span class="tok-com"># MAYÚSCULA exacta del enunciado</span>
+        ACTIVE = <span class="tok-str">"ACTIVE"</span>, <span class="tok-str">"Active"</span>
+        CANCELLED = <span class="tok-str">"CANCELLED"</span>, <span class="tok-str">"Cancelled"</span>  <span class="tok-com"># ¡doble L!</span>
+
+    marca = models.ForeignKey(Marca, on_delete=models.PROTECT, related_name=<span class="tok-str">"vehiculos"</span>)
+    modelo = models.CharField(max_length=<span class="tok-num">120</span>)
+    anio = models.IntegerField()
+    placa = models.CharField(max_length=<span class="tok-num">20</span>, unique=<span class="tok-kw">True</span>)
+    color = models.CharField(max_length=<span class="tok-num">60</span>, blank=<span class="tok-kw">True</span>, default=<span class="tok-str">""</span>)
+    status = models.CharField(max_length=<span class="tok-num">20</span>, choices=Status.choices, default=Status.RESERVED)
+    creado_en = models.DateTimeField(auto_now_add=<span class="tok-kw">True</span>)
+
+    <span class="tok-kw">def</span> __str__(self):
+        <span class="tok-kw">return</span> f<span class="tok-str">"{self.marca.nombre} {self.modelo} ({self.placa})"</span></code></pre>
+          </div>
+          <h4>Reglas de nomenclatura</h4>
+          <ul class="checklist" style="border:none;">
+            <li><input type="checkbox"><label>Clase del modelo → <b>singular</b> (<code>Vehiculo</code>, no <code>Vehiculos</code>)</label></li>
+            <li><input type="checkbox"><label>Campo FK → <b>singular</b>, nombra qué ES el objeto (<code>marca</code>, no <code>marcas</code>)</label></li>
+            <li><input type="checkbox"><label><code>related_name</code> → <b>plural</b> (navegas hacia muchos)</label></li>
+            <li><input type="checkbox"><label><code>unique=True</code> solo si el campo identifica de forma individual — nunca en algo que agrupa (una terminal, un estado)</label></li>
+            <li><input type="checkbox"><label><code>on_delete=models.PROTECT</code> casi siempre correcto para catálogos</label></li>
+            <li><input type="checkbox"><label>Nunca declarar <code>id</code> a mano — <code>DEFAULT_AUTO_FIELD</code> ya lo genera</label></li>
+            <li><input type="checkbox"><label>Campo <code>NOT NULL</code> sin default en el enunciado → nunca <code>null=True</code>/<code>blank=True</code>/<code>default</code> en Django</label></li>
+            <li><input type="checkbox"><label><code>TIMESTAMP</code> en el enunciado → <code>DateTimeField</code>, nunca <code>DateField</code> ni <code>TimeField</code></label></li>
+          </ul>
+          <div class="callout danger"><span class="ic">⚠️</span><div>Después de <b>cualquier</b> cambio en <code>models.py</code>: <code>makemigrations</code> + <code>migrate</code>, siempre.</div></div>
+        </section>
+
+        <section class="doc" id="b-6">
+          <h2><span class="num">6</span>Serializers</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — catalog/serializers.py</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> rest_framework <span class="tok-kw">import</span> serializers
+<span class="tok-kw">from</span> .models <span class="tok-kw">import</span> Marca, Vehiculo
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">MarcaSerializer</span>(serializers.ModelSerializer):
+    <span class="tok-kw">class</span> <span class="tok-cls">Meta</span>:
+        model = Marca
+        fields = [<span class="tok-str">"id"</span>, <span class="tok-str">"nombre"</span>]
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">VehiculoSerializer</span>(serializers.ModelSerializer):
+    marca_nombre = serializers.CharField(source=<span class="tok-str">"marca.nombre"</span>, read_only=<span class="tok-kw">True</span>)
+
+    <span class="tok-kw">class</span> <span class="tok-cls">Meta</span>:
+        model = Vehiculo
+        fields = [<span class="tok-str">"id"</span>, <span class="tok-str">"marca"</span>, <span class="tok-str">"marca_nombre"</span>, <span class="tok-str">"modelo"</span>, <span class="tok-str">"anio"</span>, <span class="tok-str">"placa"</span>, <span class="tok-str">"color"</span>, <span class="tok-str">"status"</span>, <span class="tok-str">"creado_en"</span>]</code></pre>
+          </div>
+          <div class="callout warn"><span class="ic">⚠️</span><div>Siempre van los dos: el ID de la FK (<code>marca</code>, escribible) Y el nombre legible (<code>marca_nombre</code>, <code>read_only=True</code>). Si solo pones el segundo, el cliente no puede mandar el ID al crear.</div></div>
+        </section>
+
+        <section class="doc" id="b-7">
+          <h2><span class="num">7</span>Permisos y Vistas</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — catalog/permissions.py</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> rest_framework.permissions <span class="tok-kw">import</span> BasePermission, SAFE_METHODS
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">IsAdminOrReadOnly</span>(BasePermission):
+    <span class="tok-kw">def</span> has_permission(self, request, view):
+        <span class="tok-kw">if</span> request.method <span class="tok-kw">in</span> SAFE_METHODS:
+            <span class="tok-kw">return</span> <span class="tok-kw">True</span>
+        <span class="tok-kw">return</span> bool(request.user <span class="tok-kw">and</span> request.user.is_authenticated <span class="tok-kw">and</span> request.user.is_staff)</code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — catalog/views.py</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> rest_framework <span class="tok-kw">import</span> viewsets
+<span class="tok-kw">from</span> rest_framework.permissions <span class="tok-kw">import</span> AllowAny
+<span class="tok-kw">from</span> django_filters.rest_framework <span class="tok-kw">import</span> DjangoFilterBackend
+<span class="tok-kw">from</span> rest_framework.filters <span class="tok-kw">import</span> SearchFilter, OrderingFilter
+<span class="tok-kw">from</span> .models <span class="tok-kw">import</span> Marca, Vehiculo
+<span class="tok-kw">from</span> .serializers <span class="tok-kw">import</span> MarcaSerializer, VehiculoSerializer
+<span class="tok-kw">from</span> .permissions <span class="tok-kw">import</span> IsAdminOrReadOnly
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">MarcaViewSet</span>(viewsets.ModelViewSet):
+    queryset = Marca.objects.all().order_by(<span class="tok-str">"id"</span>)
+    serializer_class = MarcaSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = [<span class="tok-str">"nombre"</span>]
+    ordering_fields = [<span class="tok-str">"id"</span>, <span class="tok-str">"nombre"</span>]
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">VehiculoViewSet</span>(viewsets.ModelViewSet):
+    queryset = Vehiculo.objects.select_related(<span class="tok-str">"marca"</span>).all().order_by(<span class="tok-str">"-id"</span>)
+    serializer_class = VehiculoSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = [<span class="tok-str">"marca"</span>, <span class="tok-str">"status"</span>]
+    search_fields = [<span class="tok-str">"modelo"</span>, <span class="tok-str">"placa"</span>, <span class="tok-str">"marca__nombre"</span>]
+    ordering_fields = [<span class="tok-str">"id"</span>, <span class="tok-str">"anio"</span>, <span class="tok-str">"modelo"</span>, <span class="tok-str">"placa"</span>, <span class="tok-str">"creado_en"</span>]
+
+    <span class="tok-kw">def</span> get_queryset(self):
+        qs = <span class="tok-fn">super</span>().get_queryset()
+        anio_min = self.request.query_params.get(<span class="tok-str">"anio_min"</span>)
+        anio_max = self.request.query_params.get(<span class="tok-str">"anio_max"</span>)
+        <span class="tok-kw">if</span> anio_min:
+            qs = qs.filter(anio__gte=anio_min)
+        <span class="tok-kw">if</span> anio_max:
+            qs = qs.filter(anio__lte=anio_max)
+        <span class="tok-kw">return</span> qs
+
+    <span class="tok-kw">def</span> get_permissions(self):
+        <span class="tok-kw">if</span> self.action == <span class="tok-str">"list"</span>:       <span class="tok-com"># público SOLO en listar</span>
+            <span class="tok-kw">return</span> [AllowAny()]
+        <span class="tok-kw">return</span> <span class="tok-fn">super</span>().get_permissions()</code></pre>
+          </div>
+
+          <h3>🔑 filterset_fields vs search_fields vs ordering_fields</h3>
+          <table class="ref">
+            <tr><th></th><th>Qué hace</th><th>Cuándo usarlo</th><th>Ejemplo</th></tr>
+            <tr><td><code>filterset_fields</code></td><td>Coincidencia <b>exacta</b> (=)</td><td>Un ID de FK, un status/choice fijo</td><td><code>?status=RESERVED</code></td></tr>
+            <tr><td><code>search_fields</code></td><td>Texto <b>parcial</b>, solo campos de texto</td><td>Nombre, placa — nunca status ni fechas ni números</td><td><code>?search=toy</code></td></tr>
+            <tr><td><code>ordering_fields</code></td><td>Solo cambia el <b>orden</b>, no filtra nada</td><td>Cualquier campo por el que tenga sentido ordenar</td><td><code>?ordering=-anio</code></td></tr>
+          </table>
+
+          <h3>🔑 Reglas de _min/_max en get_queryset()</h3>
+          <ul class="checklist" style="border:none;">
+            <li><input type="checkbox"><label>Solo agrégalo si hay un campo Integer/Decimal/DateTime donde tenga sentido de negocio un rango</label></li>
+            <li><input type="checkbox"><label><code>IntegerField</code> → puedes castear con <code>int(...)</code></label></li>
+            <li><input type="checkbox"><label><code>DecimalField</code>/<code>FloatField</code>/<code>DateTimeField</code> → <b>nunca</b> castees, pasa el string directo</label></li>
+          </ul>
+        </section>
+
+        <section class="doc" id="b-8">
+          <h2><span class="num">8</span>Auth (register/login) + URLs</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — catalog/auth_serializers.py</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> django.contrib.auth <span class="tok-kw">import</span> get_user_model
+<span class="tok-kw">from</span> rest_framework <span class="tok-kw">import</span> serializers
+
+User = get_user_model()
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">RegisterSerializer</span>(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=<span class="tok-kw">True</span>, min_length=<span class="tok-num">6</span>)
+
+    <span class="tok-kw">class</span> <span class="tok-cls">Meta</span>:
+        model = User
+        fields = [<span class="tok-str">"username"</span>, <span class="tok-str">"email"</span>, <span class="tok-str">"password"</span>]
+
+    <span class="tok-kw">def</span> create(self, validated_data):
+        <span class="tok-kw">return</span> User.objects.create_user(     <span class="tok-com"># NUNCA .create() a secas — no hashea el password</span>
+            username=validated_data[<span class="tok-str">"username"</span>],
+            email=validated_data.get(<span class="tok-str">"email"</span>, <span class="tok-str">""</span>),
+            password=validated_data[<span class="tok-str">"password"</span>],
+        )</code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — config/urls.py</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> django.contrib <span class="tok-kw">import</span> admin
+<span class="tok-kw">from</span> django.urls <span class="tok-kw">import</span> path, include
+<span class="tok-kw">from</span> rest_framework_simplejwt.views <span class="tok-kw">import</span> TokenObtainPairView, TokenRefreshView
+<span class="tok-kw">from</span> catalog.auth_views <span class="tok-kw">import</span> register_view
+
+urlpatterns = [
+    path(<span class="tok-str">"admin/"</span>, admin.site.urls),
+    path(<span class="tok-str">"api/auth/login/"</span>, TokenObtainPairView.as_view(), name=<span class="tok-str">"token_obtain_pair"</span>),
+    path(<span class="tok-str">"api/auth/refresh/"</span>, TokenRefreshView.as_view(), name=<span class="tok-str">"token_refresh"</span>),
+    path(<span class="tok-str">"api/auth/register/"</span>, register_view, name=<span class="tok-str">"register"</span>),
+    path(<span class="tok-str">"api/"</span>, include(<span class="tok-str">"catalog.urls"</span>)),
+]</code></pre>
+          </div>
+          <div class="callout warn"><span class="ic">⚠️</span><div>Si el enunciado especifica un nombre de endpoint literal (ej. <code>GET /flight-events</code>), respétalo tal cual — el frontend/móvil van a depender de ese nombre exacto.</div></div>
+          <div class="code-wrap">
+            <div class="code-head"><span>bash — levantar el servidor</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver <span class="tok-num">0.0</span>.<span class="tok-num">0.0</span>:<span class="tok-num">8000</span></code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="b-9">
+          <h2><span class="num">9</span>MongoDB — conexión y "schemas"</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — catalog/mongo.py</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> django.conf <span class="tok-kw">import</span> settings
+<span class="tok-kw">from</span> pymongo <span class="tok-kw">import</span> MongoClient
+
+_client = MongoClient(settings.MONGO_URI)
+db = _client[settings.MONGO_DB]</code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — catalog/mongo_serializers.py</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> rest_framework <span class="tok-kw">import</span> serializers
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">ServiceTypeSerializer</span>(serializers.Serializer):     <span class="tok-com"># Serializer, NUNCA ModelSerializer</span>
+    name = serializers.CharField(max_length=<span class="tok-num">120</span>)
+    description = serializers.CharField(required=<span class="tok-kw">False</span>, allow_blank=<span class="tok-kw">True</span>)
+    base_price = serializers.FloatField(required=<span class="tok-kw">False</span>)   <span class="tok-com"># FloatField, NUNCA DecimalField en Mongo</span>
+    is_active = serializers.BooleanField(default=<span class="tok-kw">True</span>)
+    created_at = serializers.DateTimeField(required=<span class="tok-kw">False</span>)  <span class="tok-com"># DateTimeField, NUNCA DateField en Mongo</span>
+
+
+<span class="tok-kw">class</span> <span class="tok-cls">VehicleServiceSerializer</span>(serializers.Serializer):
+    <span class="tok-kw">class</span> <span class="tok-cls">EventType</span>:                       <span class="tok-com"># opciones fijas: clase simple con CHOICES</span>
+        CREATED = <span class="tok-str">"CREATED"</span>
+        CONFIRMED = <span class="tok-str">"CONFIRMED"</span>
+        CHOICES = [(CREATED, <span class="tok-str">"Created"</span>), (CONFIRMED, <span class="tok-str">"Confirmed"</span>)]
+
+    vehiculo_id = serializers.IntegerField()          <span class="tok-com"># FK a Postgres → IntegerField</span>
+    service_type_id = serializers.CharField()         <span class="tok-com"># FK a OTRA colección Mongo → CharField</span>
+    event_type = serializers.ChoiceField(choices=EventType.CHOICES)
+    date = serializers.DateTimeField(required=<span class="tok-kw">False</span>)  <span class="tok-com"># el backend la asigna, nunca la manda el cliente</span>
+    cost = serializers.FloatField(required=<span class="tok-kw">False</span>)
+    notes = serializers.CharField(required=<span class="tok-kw">False</span>, allow_blank=<span class="tok-kw">True</span>)</code></pre>
+          </div>
+
+          <div class="cmp-grid">
+            <div class="cmp-card">
+              <h4>🥇 Regla de oro #1 — Fechas</h4>
+              <ul>
+                <li>Siempre <code>DateTimeField</code> + <code>datetime.now()</code></li>
+                <li>Nunca <code>DateField</code>/<code>date.today()</code></li>
+                <li>BSON no tiene tipo "solo fecha", solo fecha+hora</li>
+              </ul>
+            </div>
+            <div class="cmp-card">
+              <h4>🥈 Regla de oro #2 — Dinero</h4>
+              <ul>
+                <li>Siempre <code>FloatField</code></li>
+                <li>Nunca <code>DecimalField</code></li>
+                <li>BSON no sabe serializar <code>Decimal</code> de Python</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="doc" id="b-10">
+          <h2><span class="num">10</span>MongoDB — vistas</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — catalog/service_types_views.py</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">from</span> datetime <span class="tok-kw">import</span> datetime
+<span class="tok-kw">from</span> rest_framework.decorators <span class="tok-kw">import</span> api_view, permission_classes
+<span class="tok-kw">from</span> rest_framework.permissions <span class="tok-kw">import</span> IsAuthenticated
+<span class="tok-kw">from</span> rest_framework.response <span class="tok-kw">import</span> Response
+<span class="tok-kw">from</span> rest_framework <span class="tok-kw">import</span> status
+<span class="tok-kw">from</span> bson <span class="tok-kw">import</span> ObjectId
+<span class="tok-kw">from</span> bson.errors <span class="tok-kw">import</span> InvalidId
+<span class="tok-kw">from</span> .mongo <span class="tok-kw">import</span> db
+<span class="tok-kw">from</span> .mongo_serializers <span class="tok-kw">import</span> ServiceTypeSerializer
+
+col = db[<span class="tok-str">"service_types"</span>]
+
+
+<span class="tok-kw">def</span> fix_id(doc):
+    doc[<span class="tok-str">"id"</span>] = <span class="tok-fn">str</span>(doc[<span class="tok-str">"_id"</span>])
+    <span class="tok-kw">del</span> doc[<span class="tok-str">"_id"</span>]
+    <span class="tok-kw">return</span> doc
+
+
+<span class="tok-kw">def</span> oid_or_none(id_str: <span class="tok-fn">str</span>):
+    <span class="tok-kw">try</span>:
+        <span class="tok-kw">return</span> ObjectId(id_str)
+    <span class="tok-kw">except</span> InvalidId:
+        <span class="tok-kw">return</span> <span class="tok-kw">None</span>
+
+
+<span class="tok-fn">@api_view</span>([<span class="tok-str">"GET"</span>, <span class="tok-str">"POST"</span>])
+<span class="tok-fn">@permission_classes</span>([IsAuthenticated])
+<span class="tok-kw">def</span> service_types_list_create(request):
+    <span class="tok-kw">if</span> request.method == <span class="tok-str">"GET"</span>:
+        q = <span class="tok-fn">dict</span>(request.query_params)
+        docs = [fix_id(d) <span class="tok-kw">for</span> d <span class="tok-kw">in</span> col.find(q)]
+        <span class="tok-kw">return</span> Response(docs)
+
+    serializer = ServiceTypeSerializer(data=request.data)
+    serializer.is_valid(raise_exception=<span class="tok-kw">True</span>)
+
+    data = serializer.validated_data
+    data.setdefault(<span class="tok-str">"created_at"</span>, datetime.now())   <span class="tok-com"># SIEMPRE usar "data" de aquí en adelante</span>
+
+    res = col.insert_one(data)                       <span class="tok-com"># NUNCA volver a usar serializer.validated_data</span>
+    doc = col.find_one({<span class="tok-str">"_id"</span>: res.inserted_id})
+    <span class="tok-kw">return</span> Response(fix_id(doc), status=status.HTTP_201_CREATED)
+
+
+<span class="tok-fn">@api_view</span>([<span class="tok-str">"GET"</span>, <span class="tok-str">"PUT"</span>, <span class="tok-str">"PATCH"</span>, <span class="tok-str">"DELETE"</span>])
+<span class="tok-fn">@permission_classes</span>([IsAuthenticated])
+<span class="tok-kw">def</span> service_types_detail(request, id: <span class="tok-fn">str</span>):
+    _id = oid_or_none(id)
+    <span class="tok-kw">if</span> _id <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-kw">return</span> Response({<span class="tok-str">"detail"</span>: <span class="tok-str">"id inválido"</span>}, status=status.HTTP_400_BAD_REQUEST)
+
+    <span class="tok-kw">if</span> request.method == <span class="tok-str">"GET"</span>:
+        doc = col.find_one({<span class="tok-str">"_id"</span>: _id})
+        <span class="tok-kw">if</span> <span class="tok-kw">not</span> doc:
+            <span class="tok-kw">return</span> Response({<span class="tok-str">"detail"</span>: <span class="tok-str">"No encontrado"</span>}, status=status.HTTP_404_NOT_FOUND)
+        <span class="tok-kw">return</span> Response(fix_id(doc))
+
+    <span class="tok-kw">if</span> request.method <span class="tok-kw">in</span> [<span class="tok-str">"PUT"</span>, <span class="tok-str">"PATCH"</span>]:
+        serializer = ServiceTypeSerializer(data=request.data, partial=(request.method == <span class="tok-str">"PATCH"</span>))
+        serializer.is_valid(raise_exception=<span class="tok-kw">True</span>)
+        col.update_one({<span class="tok-str">"_id"</span>: _id}, {<span class="tok-str">"$set"</span>: serializer.validated_data})   <span class="tok-com"># $set: SOLO esos campos</span>
+        doc = col.find_one({<span class="tok-str">"_id"</span>: _id})
+        <span class="tok-kw">if</span> <span class="tok-kw">not</span> doc:
+            <span class="tok-kw">return</span> Response({<span class="tok-str">"detail"</span>: <span class="tok-str">"No encontrado"</span>}, status=status.HTTP_404_NOT_FOUND)
+        <span class="tok-kw">return</span> Response(fix_id(doc))
+
+    res = col.delete_one({<span class="tok-str">"_id"</span>: _id})
+    <span class="tok-kw">if</span> res.deleted_count == <span class="tok-num">0</span>:
+        <span class="tok-kw">return</span> Response({<span class="tok-str">"detail"</span>: <span class="tok-str">"No encontrado"</span>}, status=status.HTTP_404_NOT_FOUND)
+    <span class="tok-kw">return</span> Response(status=status.HTTP_204_NO_CONTENT)</code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="b-11">
+          <h2><span class="num">11</span>Qué va y qué NO va en el body de Postman</h2>
+          <table class="ref">
+            <tr><th>Regla</th><th>Ejemplo</th></tr>
+            <tr><td>Sin <code>required=False</code> → <b>obligatorio</b></td><td><code>name</code>, <code>vehiculo_id</code></td></tr>
+            <tr><td>Con <code>required=False</code> → <b>opcional</b></td><td><code>notes</code>, <code>description</code></td></tr>
+            <tr><td>Campo con <code>default=...</code> en el <b>modelo</b> → opcional (DRF lo infiere)</td><td><code>status</code> con default</td></tr>
+            <tr><td>Campo que el <b>backend asigna solo</b> → nunca se manda</td><td><code>created_at</code>, <code>date</code></td></tr>
+            <tr><td><code>BooleanField</code> → <code>true</code>/<code>false</code> sin comillas</td><td><code>"is_available": true</code></td></tr>
+            <tr><td><code>DateTimeField</code> → string ISO con comillas</td><td><code>"departure_time": "2026-08-20T14:30:00"</code></td></tr>
+          </table>
+        </section>
+
+      </div>
+      <!-- ======================= /PANEL BACKEND ======================= -->
+
+      <!-- ======================= PANEL: FRONTEND ======================= -->
+      <div class="panel" id="panel-frontend">
+
+        <section class="doc" id="f-1">
+          <h2><span class="num">1</span>Setup</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>bash — Ubuntu y Windows (npm no cambia)</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>npm create vite@latest vehiculos-ui -- --template react-ts
+<span class="tok-fn">cd</span> vehiculos-ui
+npm install
+npm i axios
+npm i @mui/material @emotion/react @emotion/styled
+npm i @mui/icons-material
+npm i react-router-dom</code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>.env</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>VITE_API_BASE_URL=http://127.0.0.1:8000</code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>bash — arrancar</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>npm run dev</code></pre>
+          </div>
+          <p><b>Estructura:</b></p>
+          <div class="code-wrap"><pre><code>src/
+  api/       (http.ts, auth.api.ts, marcas.api.ts, vehiculos.api.ts)
+  components/ (RequireAuth.tsx)
+  pages/     (HomePage, AboutPage, PublicVehiclesPage, LoginPage, AdminHomePage, AdminMarcasPage, AdminVehiculosPage)
+  App.tsx</code></pre></div>
+        </section>
+
+        <section class="doc" id="f-2">
+          <h2><span class="num">2</span>src/api/http.ts</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>typescript</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">import</span> axios <span class="tok-kw">from</span> <span class="tok-str">"axios"</span>;
+
+<span class="tok-kw">export const</span> API_BASE_URL = import.meta.env.VITE_API_BASE_URL || <span class="tok-str">"http://127.0.0.1:8000"</span>;
+
+<span class="tok-kw">export const</span> http = axios.create({ baseURL: API_BASE_URL });
+
+http.interceptors.request.use((config) => {
+  <span class="tok-kw">const</span> token = localStorage.getItem(<span class="tok-str">"accessToken"</span>);
+  <span class="tok-kw">if</span> (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = <span class="tok-str">`Bearer ${token}`</span>;
+  }
+  <span class="tok-kw">return</span> config;
+});</code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="f-3">
+          <h2><span class="num">3</span>Patrón de API — la regla de Omit/Partial</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>typescript — src/api/vehiculos.api.ts</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">import</span> { http } <span class="tok-kw">from</span> <span class="tok-str">"./http"</span>;
+
+<span class="tok-kw">export type</span> Paginated&lt;T&gt; = { count: <span class="tok-cls">number</span>; next: <span class="tok-cls">string</span> | <span class="tok-kw">null</span>; previous: <span class="tok-cls">string</span> | <span class="tok-kw">null</span>; results: T[] };
+
+<span class="tok-kw">export type</span> Vehiculo = {
+  id: <span class="tok-cls">number</span>;
+  marca: <span class="tok-cls">number</span>;
+  marca_nombre?: <span class="tok-cls">string</span>;   <span class="tok-com">// ? = campo calculado por el backend, nunca se envía</span>
+  modelo: <span class="tok-cls">string</span>;
+  anio: <span class="tok-cls">number</span>;
+  placa: <span class="tok-cls">string</span>;
+  color?: <span class="tok-cls">string</span>;
+  creado_en?: <span class="tok-cls">string</span>;
+};
+
+<span class="tok-kw">export async function</span> listVehiculosApi() {
+  <span class="tok-kw">const</span> { data } = <span class="tok-kw">await</span> http.get&lt;Paginated&lt;Vehiculo&gt;&gt;(<span class="tok-str">"/api/vehiculos/"</span>);
+  <span class="tok-kw">return</span> data;
+}
+
+<span class="tok-com">// Modelo con 1 solo campo editable → función simple recibiendo el valor suelto</span>
+<span class="tok-kw">export async function</span> createMarcaApi(nombre: <span class="tok-cls">string</span>) { <span class="tok-com">/* ... */</span> }
+
+<span class="tok-com">// Modelo con 2+ campos editables → objeto tipado</span>
+<span class="tok-kw">export async function</span> createVehiculoApi(payload: Omit&lt;Vehiculo, <span class="tok-str">"id"</span> | <span class="tok-str">"marca_nombre"</span> | <span class="tok-str">"creado_en"</span>&gt;) {
+  <span class="tok-kw">const</span> { data } = <span class="tok-kw">await</span> http.post&lt;Vehiculo&gt;(<span class="tok-str">"/api/vehiculos/"</span>, payload);
+  <span class="tok-kw">return</span> data;
+}
+
+<span class="tok-kw">export async function</span> updateVehiculoApi(id: <span class="tok-cls">number</span>, payload: Partial&lt;Vehiculo&gt;) {
+  <span class="tok-kw">const</span> { data } = <span class="tok-kw">await</span> http.put&lt;Vehiculo&gt;(<span class="tok-str">`/api/vehiculos/${id}/`</span>, payload);
+  <span class="tok-kw">return</span> data;
+}
+
+<span class="tok-kw">export async function</span> deleteVehiculoApi(id: <span class="tok-cls">number</span>) {
+  <span class="tok-kw">await</span> http.delete(<span class="tok-str">`/api/vehiculos/${id}/`</span>);
+}</code></pre>
+          </div>
+          <div class="callout tip"><span class="ic">💡</span><div><code>Omit&lt;Tipo, "id" | "campo_calculado" | "auto_now"&gt;</code> — excluye siempre: el ID, campos de solo lectura calculados, y timestamps automáticos.</div></div>
+        </section>
+
+        <section class="doc" id="f-4">
+          <h2><span class="num">4</span>RequireAuth.tsx</h2>
+          <p class="lede">Genérico, no depende del negocio — cópialo tal cual siempre.</p>
+          <div class="code-wrap">
+            <div class="code-head"><span>tsx</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">import</span> { Navigate } <span class="tok-kw">from</span> <span class="tok-str">"react-router-dom"</span>;
+<span class="tok-kw">import type</span> { JSX } <span class="tok-kw">from</span> <span class="tok-str">"react"</span>;
+
+<span class="tok-kw">export default function</span> RequireAuth({ children }: { children: JSX.Element }) {
+  <span class="tok-kw">const</span> token = localStorage.getItem(<span class="tok-str">"accessToken"</span>);
+  <span class="tok-kw">if</span> (!token) <span class="tok-kw">return</span> &lt;Navigate to=<span class="tok-str">"/login"</span> replace /&gt;;
+  <span class="tok-kw">return</span> children;
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="f-5">
+          <h2><span class="num">5</span>Pantalla Admin CRUD — checklist de 4 lugares</h2>
+          <p class="lede">Por cada campo del formulario, hazlo en <b>los 4 lugares</b>:</p>
+          <ol class="steps">
+            <li><code>useState</code> propio (camelCase siempre — nunca mezclar con snake_case)</li>
+            <li>Incluido en la <b>validación</b> de <code>save()</code></li>
+            <li>Incluido en el <b>reseteo</b> del botón "Limpiar"</li>
+            <li>Incluido en <b><code>startEdit()</code></b> para llenar el formulario al editar</li>
+          </ol>
+          <div class="code-wrap">
+            <div class="code-head"><span>tsx — AdminVehiculosPage.tsx (fragmento)</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">const</span> [marca, setMarca] = useState&lt;<span class="tok-cls">number</span>&gt;(<span class="tok-num">0</span>);       <span class="tok-com">// FK: selección actual</span>
+<span class="tok-kw">const</span> [marcas, setMarcas] = useState&lt;Marca[]&gt;([]);    <span class="tok-com">// FK: catálogo completo para el &lt;Select&gt;</span>
+<span class="tok-kw">const</span> [modelo, setModelo] = useState(<span class="tok-str">""</span>);
+<span class="tok-kw">const</span> [anio, setAnio] = useState(<span class="tok-num">2020</span>);
+<span class="tok-kw">const</span> [placa, setPlaca] = useState(<span class="tok-str">""</span>);
+<span class="tok-kw">const</span> [status, setStatus] = useState(<span class="tok-str">"RESERVED"</span>);
+<span class="tok-kw">const</span> [isAvailable, setIsAvailable] = useState(<span class="tok-kw">true</span>); <span class="tok-com">// booleano</span>
+
+<span class="tok-kw">const</span> loadMarcas = <span class="tok-kw">async</span> () => {
+  <span class="tok-kw">const</span> data = <span class="tok-kw">await</span> listMarcasApi();
+  setMarcas(data.results);
+  <span class="tok-kw">if</span> (!marca && data.results.length &gt; <span class="tok-num">0</span>) setMarca(data.results[<span class="tok-num">0</span>].id);  <span class="tok-com">// preselecciona la primera</span>
+};
+
+<span class="tok-kw">const</span> save = <span class="tok-kw">async</span> () => {
+  <span class="tok-kw">if</span> (!modelo.trim() || !placa.trim()) <span class="tok-kw">return</span> setError(<span class="tok-str">"Todos los campos son requeridos"</span>);
+  <span class="tok-kw">const</span> payload = { marca: <span class="tok-fn">Number</span>(marca), modelo: modelo.trim(), anio: <span class="tok-fn">Number</span>(anio), placa: placa.trim(), status, is_available: isAvailable };
+  <span class="tok-kw">if</span> (editId) <span class="tok-kw">await</span> updateVehiculoApi(editId, payload);
+  <span class="tok-kw">else</span> <span class="tok-kw">await</span> createVehiculoApi(payload);   <span class="tok-com">// sin "as any" — si el payload está bien tipado, no hace falta forzar</span>
+};</code></pre>
+          </div>
+
+          <h3>Select con datos de otra tabla (dinámico)</h3>
+          <div class="code-wrap"><pre><code>&lt;Select value={marca} onChange={(e) =&gt; setMarca(<span class="tok-fn">Number</span>(e.target.value))}&gt;
+  {marcas.map((m) =&gt; &lt;MenuItem key={m.id} value={m.id}&gt;{m.nombre}&lt;/MenuItem&gt;)}
+&lt;/Select&gt;</code></pre></div>
+
+          <h3>Select de opciones fijas (estático)</h3>
+          <div class="code-wrap"><pre><code>&lt;Select value={status} onChange={(e) =&gt; setStatus(e.target.value)}&gt;
+  &lt;MenuItem value=<span class="tok-str">"RESERVED"</span>&gt;Reserved&lt;/MenuItem&gt;
+  &lt;MenuItem value=<span class="tok-str">"ACTIVE"</span>&gt;Active&lt;/MenuItem&gt;
+  &lt;MenuItem value=<span class="tok-str">"CANCELLED"</span>&gt;Cancelled&lt;/MenuItem&gt;
+&lt;/Select&gt;</code></pre></div>
+
+          <h3>Booleano en formulario y en tabla</h3>
+          <div class="code-wrap"><pre><code>&lt;FormControlLabel control={&lt;Switch checked={isAvailable} onChange={(e) =&gt; setIsAvailable(e.target.checked)} /&gt;} label={isAvailable ? <span class="tok-str">"Disponible"</span> : <span class="tok-str">"No disponible"</span>} /&gt;
+...
+&lt;TableCell&gt;{v.is_available ? <span class="tok-str">"Sí"</span> : <span class="tok-str">"No"</span>}&lt;/TableCell&gt;</code></pre></div>
+
+          <h3>Fecha+hora en formulario</h3>
+          <div class="code-wrap"><pre><code>&lt;TextField type=<span class="tok-str">"datetime-local"</span> value={fecha} onChange={(e) =&gt; setFecha(e.target.value)} InputLabelProps={{ shrink: <span class="tok-kw">true</span> }} /&gt;</code></pre></div>
+          <p class="lede">Formato que se manda al backend: <code>"2026-08-20T14:30:00"</code></p>
+        </section>
+
+        <section class="doc" id="f-6">
+          <h2><span class="num">6</span>App.tsx — checklist final</h2>
+          <p>Verifica que <b>coincidan exactamente</b>, carácter por carácter, en 3 lugares distintos:</p>
+          <ul class="checklist" style="border:none;">
+            <li><input type="checkbox"><label>El <code>path</code> de cada <code>&lt;Route&gt;</code> en <code>App.tsx</code></label></li>
+            <li><input type="checkbox"><label>El <code>to=</code> de cada botón/link que navega ahí (ej. en <code>AdminHomePage</code>)</label></li>
+            <li><input type="checkbox"><label>El nombre de archivo/import del componente</label></li>
+          </ul>
+        </section>
+
+      </div>
+      <!-- ======================= /PANEL FRONTEND ======================= -->
+
+      <div class="panel" id="panel-mobile">
+
+        <section class="doc" id="m-1">
+          <h2><span class="num">1</span>Setup</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>bash — Ubuntu (instalar Node 22 si falta)</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-fn">sudo</span> apt update
+<span class="tok-fn">sudo</span> apt -y install curl ca-certificates
+curl -fsSL https://deb.nodesource.com/setup_22.x | <span class="tok-fn">sudo</span> -E bash -
+<span class="tok-fn">sudo</span> apt -y install nodejs
+node -v
+npm -v
+
+npx create-expo-app@latest vehiculos-rn --template
+<span class="tok-fn">cd</span> vehiculos-rn
+npm install
+npm i axios
+npx expo install react-native-screens react-native-safe-area-context
+npm i @react-navigation/native @react-navigation/native-stack
+npx expo install @react-native-picker/picker</code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>bash — arrancar</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>npm run start
+<span class="tok-com"># si algo no se refleja tras varios cambios:</span>
+npx expo start -c</code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="m-2">
+          <h2><span class="num">2</span>⚠️ Checklist si trae Expo Router de plantilla</h2>
+          <p class="lede">Señal: ves "Welcome to Expo" en vez de tu Login, o menciona <code>src/app/index.tsx</code>.</p>
+          <ol class="steps">
+            <li>Borrar <code>src/app/</code>, <code>src/hooks/</code>, <code>src/constants/</code> (dejar <code>src/components/</code> vacía)</li>
+            <li>En <code>package.json</code>: <code>"main": "expo-router/entry"</code> → <code>"main": "index.js"</code></li>
+            <li>Crear <code>index.js</code> en la raíz (código abajo)</li>
+            <li>En <code>app.json</code>: quitar <code>"expo-router"</code> de plugins, borrar bloque <code>"experiments"</code></li>
+            <li>Si <code>app.json</code> tiene <code>web.output: "static"</code> → cambiar a <code>"single"</code></li>
+            <li><b>Desinstalar de verdad:</b> <code>npm uninstall expo-router</code></li>
+            <li>Si sigue fallando (error de compatibilidad con react-navigation): limpieza completa de <code>node_modules</code></li>
+          </ol>
+
+          <div class="code-wrap">
+            <div class="code-head"><span>bash — Ubuntu, limpieza completa (paso 7)</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-fn">rm</span> -rf node_modules
+<span class="tok-fn">rm</span> package-lock.json
+npm install
+npx expo start -c</code></pre>
+          </div>
+
+          <h4>Los 3 archivos ya limpios, listos para copiar-pegar</h4>
+          <div class="code-wrap">
+            <div class="code-head"><span>package.json — solo cambia "main"</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>{
+  <span class="tok-str">"name"</span>: <span class="tok-str">"mi-proyecto-rn"</span>,
+  <span class="tok-str">"main"</span>: <span class="tok-str">"index.js"</span>,
+  <span class="tok-str">"version"</span>: <span class="tok-str">"1.0.0"</span>,
+  <span class="tok-str">"scripts"</span>: {
+    <span class="tok-str">"start"</span>: <span class="tok-str">"expo start"</span>,
+    <span class="tok-str">"android"</span>: <span class="tok-str">"expo start --android"</span>,
+    <span class="tok-str">"web"</span>: <span class="tok-str">"expo start --web"</span>
+  },
+  <span class="tok-str">"private"</span>: <span class="tok-kw">true</span>
+}
+<span class="tok-com">// ⚠️ NO borres tus dependencias, solo asegura que "expo-router" no esté y "main" diga "index.js"</span></code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>index.js — nuevo, en la raíz</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">import</span> { registerRootComponent } <span class="tok-kw">from</span> <span class="tok-str">'expo'</span>;
+<span class="tok-kw">import</span> App <span class="tok-kw">from</span> <span class="tok-str">'./App'</span>;
+
+registerRootComponent(App);</code></pre>
+          </div>
+          <div class="code-wrap">
+            <div class="code-head"><span>app.json — plugins + experiments + web.output</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code>{
+  <span class="tok-str">"expo"</span>: {
+    <span class="tok-str">"name"</span>: <span class="tok-str">"mi-proyecto-rn"</span>,
+    <span class="tok-str">"slug"</span>: <span class="tok-str">"mi-proyecto-rn"</span>,
+    <span class="tok-str">"web"</span>: { <span class="tok-str">"output"</span>: <span class="tok-str">"single"</span>, <span class="tok-str">"favicon"</span>: <span class="tok-str">"./assets/images/favicon.png"</span> },
+    <span class="tok-str">"plugins"</span>: [
+      [<span class="tok-str">"expo-splash-screen"</span>, { <span class="tok-str">"backgroundColor"</span>: <span class="tok-str">"#208AEF"</span>, <span class="tok-str">"image"</span>: <span class="tok-str">"./assets/images/splash-icon.png"</span>, <span class="tok-str">"imageWidth"</span>: <span class="tok-num">76</span> }]
+    ]
+  }
+}
+<span class="tok-com">// SIN "expo-router" en plugins, SIN bloque "experiments"</span></code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="m-3">
+          <h2><span class="num">3</span>config.ts — la URL cambia según dónde pruebes</h2>
+          <table class="ref">
+            <tr><th>Dónde pruebas</th><th>URL correcta</th></tr>
+            <tr><td>Emulador Android</td><td><code>http://10.0.2.2:8000</code></td></tr>
+            <tr><td>Navegador (Expo web, tecla <code>w</code>)</td><td><code>http://127.0.0.1:8000</code></td></tr>
+            <tr><td>Celular físico (misma WiFi)</td><td><code>http://&lt;IP_de_tu_PC&gt;:8000</code> (con <code>ip addr</code>)</td></tr>
+          </table>
+          <div class="callout danger"><span class="ic">⚠️</span><div>Si pruebas en navegador y da error de <b>CORS</b> (menciona el puerto 8081) → agrega <code>http://localhost:8081</code> y <code>http://127.0.0.1:8081</code> a <code>CORS_ALLOWED_ORIGINS</code> del backend, y <b>reinicia</b> <code>runserver</code>.</div></div>
+        </section>
+
+        <section class="doc" id="m-4">
+          <h2><span class="num">4</span>http.ts — diferencia clave con la web</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>typescript — src/api/http.ts</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">import</span> axios <span class="tok-kw">from</span> <span class="tok-str">"axios"</span>;
+<span class="tok-kw">import</span> { API_BASE_URL } <span class="tok-kw">from</span> <span class="tok-str">"../config"</span>;
+
+<span class="tok-kw">type</span> GlobalAuthStore = { accessToken?: <span class="tok-cls">string</span> };
+
+<span class="tok-kw">export const</span> http = axios.create({ baseURL: API_BASE_URL, timeout: <span class="tok-num">15000</span> });
+
+http.interceptors.request.use((config) => {
+  <span class="tok-kw">const</span> store = globalThis <span class="tok-kw">as unknown as</span> GlobalAuthStore;
+  <span class="tok-kw">const</span> token = store.accessToken;    <span class="tok-com">// globalThis, NO localStorage (eso es solo de navegador)</span>
+  config.headers = config.headers ?? {};
+  <span class="tok-kw">if</span> (token) config.headers.Authorization = <span class="tok-str">`Bearer ${token}`</span>;
+  <span class="tok-kw">return</span> config;
+});</code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="m-5">
+          <h2><span class="num">5</span>⚠️ El diagnóstico ANTES de armar cualquier Picker</h2>
+          <p class="lede">Este es el paso que más se salta. Por cada campo del serializer Mongo, clasifícalo:</p>
+          <table class="ref">
+            <tr><th>Tipo de campo</th><th>Qué necesita en la pantalla</th></tr>
+            <tr><td><code>IntegerField()</code> referenciando una tabla Postgres</td><td><span class="pill dyn">DINÁMICO</span> — <code>list&lt;Entidad&gt;Api()</code> + <code>.map()</code></td></tr>
+            <tr><td><code>CharField()</code> referenciando otra colección Mongo real</td><td><span class="pill dyn">DINÁMICO</span> — API a esa colección + <code>.map()</code></td></tr>
+            <tr><td><code>ChoiceField(choices=...)</code> — opciones fijas de Django</td><td><span class="pill fix">FIJO</span> — array <code>as const</code> escrito a mano, sin API</td></tr>
+            <tr><td><code>CharField(required=False)</code> texto libre</td><td><code>TextInput</code> opcional</td></tr>
+          </table>
+          <div class="callout danger"><span class="ic">⚠️</span><div>No asumas que siempre hay 2 pickers "de API" solo porque el primer ejemplo que viste tenía esa forma. Vuelve a leer tu propio <code>mongo_serializers.py</code> cada vez.</div></div>
+        </section>
+
+        <!-- ============ SIGNATURE INTERACTIVE TOOL ============ -->
+        <section class="doc" id="m-diag">
+          <div class="diag-tool">
+            <div class="diag-head">
+              <div class="ic">🧭</div>
+              <div>
+                <h3>Diagnóstico de Picker</h3>
+              </div>
+            </div>
+            <p class="diag-sub">Escribe los campos de tu <code>mongo_serializers.py</code> real y marca cada uno como viene en el código. La herramienta te dice cuántos Pickers dinámicos y fijos necesitas.</p>
+
+            <div id="fieldsContainer"></div>
+            <button class="add-field-btn" onclick="addField()">+ agregar campo</button>
+
+            <div class="diag-result" id="diagResult"></div>
+          </div>
+        </section>
+        <!-- ============ /SIGNATURE INTERACTIVE TOOL ============ -->
+
+        <section class="doc" id="m-6">
+          <h2><span class="num">6</span>Patrón A — 2 Pickers dinámicos</h2>
+          <p class="lede">Caso especial: los dos campos apuntan a algo real (Postgres y otra colección Mongo). Ejemplo de la guía del profe: <code>vehicle_services</code> (<code>vehiculo_id</code> + <code>service_type_id</code>).</p>
+          <div class="code-wrap">
+            <div class="code-head"><span>tsx — VehicleServicesScreen.tsx (fragmento clave)</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">const</span> loadAll = <span class="tok-kw">async</span> (): Promise&lt;<span class="tok-kw">void</span>&gt; => {
+  <span class="tok-kw">const</span> [servicesData, vehiculosData, serviceTypesData] = <span class="tok-kw">await</span> Promise.all([
+    listVehicleServicesApi(), listVehiculosApi(), listServiceTypesApi(),   <span class="tok-com">// 3 llamadas</span>
+  ]);
+  ...
+};
+
+<span class="tok-com">{/* Picker DINÁMICO — viene de una API real */}</span>
+&lt;Picker selectedValue={selectedVehiculoId ?? <span class="tok-str">""</span>} onValueChange={(v) =&gt; setSelectedVehiculoId(<span class="tok-fn">Number</span>(v))}&gt;
+  {vehiculos.map((v) =&gt; &lt;Picker.Item key={v.id} label={v.placa} value={v.id} /&gt;)}
+&lt;/Picker&gt;
+
+<span class="tok-com">{/* Picker DINÁMICO — otra colección Mongo */}</span>
+&lt;Picker selectedValue={selectedServiceTypeId} onValueChange={(v) =&gt; setSelectedServiceTypeId(<span class="tok-fn">String</span>(v))}&gt;
+  {serviceTypes.map((st) =&gt; &lt;Picker.Item key={st.id} label={st.name} value={st.id} /&gt;)}
+&lt;/Picker&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="doc" id="m-7">
+          <h2><span class="num">7</span>Patrón B — 1 Picker dinámico + Pickers FIJOS</h2>
+          <p class="lede">La variante más común en la práctica: solo un campo referencia algo real, el resto son <code>ChoiceField</code>. Ejemplo — colección <code>vehicle_events</code>:</p>
+          <div class="code-wrap">
+            <div class="code-head"><span>python — el serializer real que hay que leer ANTES de escribir la pantalla</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">class</span> <span class="tok-cls">VehicleEventSerializer</span>(serializers.Serializer):
+    <span class="tok-kw">class</span> <span class="tok-cls">EventType</span>:                  <span class="tok-com"># ← tiene CHOICES → es FIJO, sin API</span>
+        CREATED = <span class="tok-str">"CREATED"</span>
+        CONFIRMED = <span class="tok-str">"CONFIRMED"</span>
+        CANCELLED = <span class="tok-str">"CANCELLED"</span>
+        CHOICES = [(CREATED, <span class="tok-str">"Created"</span>), (CONFIRMED, <span class="tok-str">"Confirmed"</span>), (CANCELLED, <span class="tok-str">"Cancelled"</span>)]
+
+    <span class="tok-kw">class</span> <span class="tok-cls">Source</span>:                     <span class="tok-com"># ← tiene CHOICES → es FIJO, sin API</span>
+        WEB = <span class="tok-str">"WEB"</span>
+        MOBILE = <span class="tok-str">"MOBILE"</span>
+        SYSTEM = <span class="tok-str">"SYSTEM"</span>
+        CHOICES = [(WEB, <span class="tok-str">"Web"</span>), (MOBILE, <span class="tok-str">"Mobile"</span>), (SYSTEM, <span class="tok-str">"System"</span>)]
+
+    vehiculo_id = serializers.IntegerField()          <span class="tok-com"># ← SIN choices → referencia real a Postgres</span>
+    event_type = serializers.ChoiceField(choices=EventType.CHOICES)
+    source = serializers.ChoiceField(choices=Source.CHOICES)
+    note = serializers.CharField(required=<span class="tok-kw">False</span>, allow_blank=<span class="tok-kw">True</span>)
+    created_at = serializers.DateTimeField(required=<span class="tok-kw">False</span>)</code></pre>
+          </div>
+
+          <div class="code-wrap">
+            <div class="code-head"><span>tsx — VehicleEventsScreen.tsx completo</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">import</span> { useEffect, useState } <span class="tok-kw">from</span> <span class="tok-str">"react"</span>;
+<span class="tok-kw">import</span> { View, Text, TextInput, Pressable, FlatList, StyleSheet } <span class="tok-kw">from</span> <span class="tok-str">"react-native"</span>;
+<span class="tok-kw">import</span> { Picker } <span class="tok-kw">from</span> <span class="tok-str">"@react-native-picker/picker"</span>;
+
+<span class="tok-kw">import</span> { listVehiculosApi } <span class="tok-kw">from</span> <span class="tok-str">"../api/vehiculos.api"</span>;
+<span class="tok-kw">import</span> { listVehicleEventsApi, createVehicleEventApi, deleteVehicleEventApi } <span class="tok-kw">from</span> <span class="tok-str">"../api/vehicleEvents.api"</span>;
+
+<span class="tok-kw">import type</span> { Vehiculo } <span class="tok-kw">from</span> <span class="tok-str">"../types/vehiculo"</span>;
+<span class="tok-kw">import type</span> { VehicleEvent } <span class="tok-kw">from</span> <span class="tok-str">"../types/vehicleEvent"</span>;
+<span class="tok-kw">import</span> { toArray } <span class="tok-kw">from</span> <span class="tok-str">"../types/drf"</span>;
+
+<span class="tok-com">// Constantes FIJAS — copiadas EXACTAS del EventType/Source de Django. Nunca vienen de una API.</span>
+<span class="tok-kw">const</span> EVENT_TYPES = [<span class="tok-str">"CREATED"</span>, <span class="tok-str">"CONFIRMED"</span>, <span class="tok-str">"CANCELLED"</span>] <span class="tok-kw">as const</span>;
+<span class="tok-kw">const</span> SOURCES = [<span class="tok-str">"WEB"</span>, <span class="tok-str">"MOBILE"</span>, <span class="tok-str">"SYSTEM"</span>] <span class="tok-kw">as const</span>;
+
+<span class="tok-kw">function</span> vehiculoLabel(v: Vehiculo): <span class="tok-cls">string</span> {
+  <span class="tok-kw">return</span> v.placa;   <span class="tok-com">// el campo que mejor identifica al vehículo en una lista</span>
+}
+
+<span class="tok-kw">export default function</span> VehicleEventsScreen() {
+  <span class="tok-kw">const</span> [items, setItems] = useState&lt;VehicleEvent[]&gt;([]);
+  <span class="tok-kw">const</span> [vehiculos, setVehiculos] = useState&lt;Vehiculo[]&gt;([]);   <span class="tok-com">// solo ESTE array viene de una API</span>
+
+  <span class="tok-kw">const</span> [selectedVehiculoId, setSelectedVehiculoId] = useState&lt;<span class="tok-cls">number</span> | <span class="tok-kw">null</span>&gt;(<span class="tok-kw">null</span>);
+  <span class="tok-kw">const</span> [selectedEventType, setSelectedEventType] = useState&lt;<span class="tok-cls">string</span>&gt;(EVENT_TYPES[<span class="tok-num">0</span>]);  <span class="tok-com">// se inicializa directo</span>
+  <span class="tok-kw">const</span> [selectedSource, setSelectedSource] = useState&lt;<span class="tok-cls">string</span>&gt;(SOURCES[<span class="tok-num">0</span>]);            <span class="tok-com">// se inicializa directo</span>
+
+  <span class="tok-kw">const</span> [notes, setNotes] = useState(<span class="tok-str">""</span>);
+  <span class="tok-kw">const</span> [errorMessage, setErrorMessage] = useState(<span class="tok-str">""</span>);
+
+  <span class="tok-kw">const</span> loadAll = <span class="tok-kw">async</span> (): Promise&lt;<span class="tok-kw">void</span>&gt; => {
+    <span class="tok-kw">try</span> {
+      setErrorMessage(<span class="tok-str">""</span>);
+      <span class="tok-com">// Promise.all con SOLO 2 llamadas — porque solo hay UNA fuente externa además del listado</span>
+      <span class="tok-kw">const</span> [eventsData, vehiculosData] = <span class="tok-kw">await</span> Promise.all([
+        listVehicleEventsApi(),
+        listVehiculosApi(),
+      ]);
+      <span class="tok-kw">const</span> eventsList = toArray(eventsData);
+      <span class="tok-kw">const</span> vehiculosList = toArray(vehiculosData);
+
+      setItems(eventsList);
+      setVehiculos(vehiculosList);
+
+      <span class="tok-kw">if</span> (selectedVehiculoId === <span class="tok-kw">null</span> && vehiculosList.length) {
+        setSelectedVehiculoId(vehiculosList[<span class="tok-num">0</span>].id);
+      }
+    } <span class="tok-kw">catch</span> {
+      setErrorMessage(<span class="tok-str">"No se pudo cargar info. ¿Token? ¿backend encendido?"</span>);
+    }
+  };
+
+  useEffect(() => { loadAll(); }, []);
+
+  <span class="tok-kw">const</span> createItem = <span class="tok-kw">async</span> (): Promise&lt;<span class="tok-kw">void</span>&gt; => {
+    <span class="tok-kw">try</span> {
+      setErrorMessage(<span class="tok-str">""</span>);
+      <span class="tok-kw">if</span> (selectedVehiculoId === <span class="tok-kw">null</span>) <span class="tok-kw">return</span> setErrorMessage(<span class="tok-str">"Seleccione un vehículo"</span>);
+
+      <span class="tok-com">// NO enviar created_at, el backend la asigna con datetime.now()</span>
+      <span class="tok-kw">const</span> created = <span class="tok-kw">await</span> createVehicleEventApi({
+        vehiculo_id: selectedVehiculoId,
+        event_type: selectedEventType,
+        source: selectedSource,
+        note: notes.trim() || <span class="tok-kw">undefined</span>,
+      });
+
+      setItems((prev) => [created, ...prev]);
+      setNotes(<span class="tok-str">""</span>);
+    } <span class="tok-kw">catch</span> {
+      setErrorMessage(<span class="tok-str">"No se pudo crear el evento"</span>);
+    }
+  };
+
+  <span class="tok-kw">const</span> removeItem = <span class="tok-kw">async</span> (id: <span class="tok-cls">string</span>): Promise&lt;<span class="tok-kw">void</span>&gt; => {
+    <span class="tok-kw">try</span> {
+      <span class="tok-kw">await</span> deleteVehicleEventApi(id);
+      setItems((prev) => prev.filter((it) => it.id !== id));
+    } <span class="tok-kw">catch</span> {
+      setErrorMessage(<span class="tok-str">"No se pudo eliminar el evento"</span>);
+    }
+  };
+
+  <span class="tok-kw">return</span> (
+    &lt;View style={styles.container}&gt;
+      &lt;FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          &lt;View&gt;
+            &lt;Text style={styles.title}&gt;Eventos de Vehículo&lt;/Text&gt;
+            {!!errorMessage && &lt;Text style={styles.error}&gt;{errorMessage}&lt;/Text&gt;}
+
+            <span class="tok-com">{/* Picker 1: DINÁMICO — el único que viene de una API real */}</span>
+            &lt;Text style={styles.label}&gt;Vehículo&lt;/Text&gt;
+            &lt;Picker selectedValue={selectedVehiculoId ?? <span class="tok-str">""</span>} onValueChange={(v) =&gt; setSelectedVehiculoId(<span class="tok-fn">Number</span>(v))}&gt;
+              {vehiculos.map((v) =&gt; &lt;Picker.Item key={v.id} label={vehiculoLabel(v)} value={v.id} /&gt;)}
+            &lt;/Picker&gt;
+
+            <span class="tok-com">{/* Picker 2: FIJO — .map() sobre la constante, SIN ninguna llamada HTTP */}</span>
+            &lt;Text style={styles.label}&gt;Tipo de evento&lt;/Text&gt;
+            &lt;Picker selectedValue={selectedEventType} onValueChange={(v) =&gt; setSelectedEventType(<span class="tok-fn">String</span>(v))}&gt;
+              {EVENT_TYPES.map((et) =&gt; &lt;Picker.Item key={et} label={et} value={et} /&gt;)}
+            &lt;/Picker&gt;
+
+            <span class="tok-com">{/* Picker 3: FIJO — mismo patrón */}</span>
+            &lt;Text style={styles.label}&gt;Fuente&lt;/Text&gt;
+            &lt;Picker selectedValue={selectedSource} onValueChange={(v) =&gt; setSelectedSource(<span class="tok-fn">String</span>(v))}&gt;
+              {SOURCES.map((s) =&gt; &lt;Picker.Item key={s} label={s} value={s} /&gt;)}
+            &lt;/Picker&gt;
+
+            &lt;TextInput placeholder=<span class="tok-str">"Notas"</span> value={notes} onChangeText={setNotes} style={styles.input} /&gt;
+            &lt;Pressable onPress={createItem} style={styles.btn}&gt;&lt;Text style={styles.btnText}&gt;Crear&lt;/Text&gt;&lt;/Pressable&gt;
+            &lt;Pressable onPress={loadAll} style={styles.btn}&gt;&lt;Text style={styles.btnText}&gt;Refrescar&lt;/Text&gt;&lt;/Pressable&gt;
+          &lt;/View&gt;
+        }
+        renderItem={({ item }) => (
+          &lt;View style={styles.row}&gt;
+            &lt;Text&gt;Vehículo ID: {item.vehiculo_id} — {item.event_type}&lt;/Text&gt;
+            &lt;Pressable onPress={() =&gt; removeItem(item.id)}&gt;&lt;Text style={styles.del}&gt;Eliminar&lt;/Text&gt;&lt;/Pressable&gt;
+          &lt;/View&gt;
+        )}
+      /&gt;
+    &lt;/View&gt;
+  );
+}</code></pre>
+          </div>
+
+          <h3>🔑 Tabla comparativa — cuál patrón usar</h3>
+          <table class="ref">
+            <tr><th></th><th>Patrón A (2 dinámicos)</th><th>Patrón B (1 dinámico + fijos)</th></tr>
+            <tr><td>¿Cuántas llamadas en Promise.all?</td><td>3</td><td>2</td></tr>
+            <tr><td>Segundo campo del serializer</td><td><code>CharField()</code> → otra colección Mongo</td><td><code>ChoiceField(choices=...)</code></td></tr>
+            <tr><td>¿Existe <code>list&lt;Segundo&gt;Api()</code>?</td><td>Sí</td><td>No hace falta</td></tr>
+            <tr><td>Se inicializa con</td><td><code>useState("")</code>, se llena tras la carga</td><td><code>useState(CONSTANTE[0])</code>, ya tiene valor</td></tr>
+            <tr><td>Origen de opciones del Picker</td><td><code>.map()</code> sobre <code>useState</code></td><td><code>.map()</code> sobre array <code>as const</code></td></tr>
+          </table>
+        </section>
+
+        <section class="doc" id="m-8">
+          <h2><span class="num">8</span>App.tsx móvil</h2>
+          <div class="code-wrap">
+            <div class="code-head"><span>tsx</span><button class="copy-btn" onclick="copyCode(this)">copiar</button></div>
+            <pre><code><span class="tok-kw">import</span> { NavigationContainer } <span class="tok-kw">from</span> <span class="tok-str">"@react-navigation/native"</span>;
+<span class="tok-kw">import</span> { createNativeStackNavigator } <span class="tok-kw">from</span> <span class="tok-str">"@react-navigation/native-stack"</span>;
+
+<span class="tok-kw">import</span> LoginScreen <span class="tok-kw">from</span> <span class="tok-str">"./src/screens/LoginScreen"</span>;
+<span class="tok-kw">import</span> HomeScreen <span class="tok-kw">from</span> <span class="tok-str">"./src/screens/HomeScreen"</span>;
+<span class="tok-kw">import</span> ServiceTypesScreen <span class="tok-kw">from</span> <span class="tok-str">"./src/screens/ServiceTypesScreen"</span>;
+<span class="tok-kw">import</span> VehicleServicesScreen <span class="tok-kw">from</span> <span class="tok-str">"./src/screens/VehicleServicesScreen"</span>;
+
+<span class="tok-kw">import type</span> { RootStackParamList } <span class="tok-kw">from</span> <span class="tok-str">"./src/types/navigation"</span>;
+
+<span class="tok-kw">const</span> Stack = createNativeStackNavigator&lt;RootStackParamList&gt;();
+
+<span class="tok-kw">export default function</span> App() {
+  <span class="tok-kw">return</span> (
+    &lt;NavigationContainer&gt;
+      &lt;Stack.Navigator initialRouteName=<span class="tok-str">"Login"</span>&gt;
+        &lt;Stack.Screen name=<span class="tok-str">"Login"</span> component={LoginScreen} options={{ title: <span class="tok-str">"Login"</span> }} /&gt;
+        &lt;Stack.Screen name=<span class="tok-str">"Home"</span> component={HomeScreen} options={{ title: <span class="tok-str">"Menú"</span> }} /&gt;
+        &lt;Stack.Screen name=<span class="tok-str">"ServiceTypes"</span> component={ServiceTypesScreen} options={{ title: <span class="tok-str">"Service Types"</span> }} /&gt;
+        &lt;Stack.Screen name=<span class="tok-str">"VehicleServices"</span> component={VehicleServicesScreen} options={{ title: <span class="tok-str">"Vehicle Services"</span> }} /&gt;
+      &lt;/Stack.Navigator&gt;
+    &lt;/NavigationContainer&gt;
+  );
+}</code></pre>
+          </div>
+          <div class="callout warn"><span class="ic">⚠️</span><div>El <code>name="..."</code> de cada <code>&lt;Stack.Screen&gt;</code> tiene que coincidir EXACTO con <code>RootStackParamList</code> y con cada <code>navigation.navigate("...")</code>.</div></div>
+        </section>
+
+      </div>
+      <div class="panel" id="panel-bd">
+        <section class="doc" id="bd-0">
+          <h2><span class="num">·</span>Base de Datos I / II — ejercicios de administración</h2>
+          <div class="empty-tab">
+            <div class="big">Todavía no hemos repasado esta parte juntos.</div>
+            <p>Cuando practiquemos los 15 ejercicios sueltos (índice, vista, función/trigger en Postgres; usuario, roles, índice, consultas en Mongo), esta pestaña se llena igual que las demás.</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="panel" id="panel-utiles">
+
+        <section class="doc" id="u-1">
+          <h2><span class="num">·</span>Equivalencias de comandos</h2>
+          <table class="ref">
+            <tr><th>Acción</th><th>CMD</th><th>PowerShell</th><th>Ubuntu (bash)</th></tr>
+            <tr><td>Borrar carpeta con contenido</td><td><code>rmdir /s /q carpeta</code></td><td><code>Remove-Item -Recurse -Force carpeta</code></td><td><code>rm -rf carpeta</code></td></tr>
+            <tr><td>Borrar archivo</td><td><code>del archivo</code></td><td><code>Remove-Item archivo</code></td><td><code>rm archivo</code></td></tr>
+            <tr><td>Activar venv</td><td>—</td><td><code>.\venv\Scripts\Activate.ps1</code></td><td><code>source venv/bin/activate</code></td></tr>
+            <tr><td>Desactivar venv</td><td>—</td><td><code>deactivate</code></td><td><code>deactivate</code></td></tr>
+            <tr><td>Ver IP local</td><td><code>ipconfig</code></td><td><code>ipconfig</code></td><td><code>ip addr</code> / <code>hostname -I</code></td></tr>
+          </table>
+        </section>
+
+        <section class="doc" id="u-2">
+          <h2><span class="num">·</span>Checklist final — antes de dar un archivo por terminado</h2>
+          <ul class="checklist">
+            <li><input type="checkbox"><label>¿El nombre de la app/carpeta en los imports coincide EXACTO con la carpeta real en disco?</label></li>
+            <li><input type="checkbox"><label>¿Los <code>TextChoices</code>/<code>ChoiceField</code> están en MAYÚSCULA y con la ortografía exacta del enunciado?</label></li>
+            <li><input type="checkbox"><label>¿<code>related_name</code> y el campo FK están en singular/plural correctos?</label></li>
+            <li><input type="checkbox"><label>¿El campo <code>id</code> NO fue declarado a mano?</label></li>
+            <li><input type="checkbox"><label>¿En Mongo, fechas son <code>DateTimeField</code>+<code>datetime.now()</code> y dinero es <code>FloatField</code>?</label></li>
+            <li><input type="checkbox"><label>¿El <code>insert_one</code>/<code>update_one</code> usa la variable <code>data</code> (no <code>serializer.validated_data</code>) tras un <code>setdefault</code>?</label></li>
+            <li><input type="checkbox"><label>¿<code>filterset_fields</code>/<code>search_fields</code>/<code>ordering_fields</code> no mezclan tipos incorrectos?</label></li>
+            <li><input type="checkbox"><label>¿El <code>_min</code>/<code>_max</code> evita <code>int()</code> sobre campos <code>Decimal</code>/<code>Float</code>/<code>DateTime</code>?</label></li>
+            <li><input type="checkbox"><label>¿El <code>Omit&lt;Tipo, ...&gt;</code> del frontend excluye <code>id</code> + todos los campos calculados/automáticos?</label></li>
+            <li><input type="checkbox"><label>¿Las variables de React/RN están en camelCase (nunca snake_case mezclado)?</label></li>
+            <li><input type="checkbox"><label>¿Cada campo nuevo del formulario está en los 4 lugares (<code>useState</code>, validación, reseteo, <code>startEdit</code>)?</label></li>
+            <li><input type="checkbox"><label>¿Las rutas de <code>App.tsx</code> coinciden EXACTO con los links/botones que navegan a ellas?</label></li>
+            <li><input type="checkbox"><label>¿<code>CORS_ALLOWED_ORIGINS</code> incluye todos los orígenes que vas a probar (5173, 8081)?</label></li>
+          </ul>
+        </section>
+
+        <section class="doc" id="u-3">
+          <h2><span class="num">·</span>Los bugs que más se repitieron en la práctica</h2>
+          <div class="cmp-grid">
+            <div class="cmp-card">
+              <h4>🐛 Copiar sin actualizar</h4>
+              <ul>
+                <li>Nombre de app viejo en imports (<code>aeropuerto</code> vs <code>airport</code>)</li>
+                <li>Comentarios/mensajes de error del proyecto anterior</li>
+                <li>URLs pegadas de otro caso (<code>/api/vehiculos/</code>)</li>
+              </ul>
+            </div>
+            <div class="cmp-card">
+              <h4>🐛 Tipos de dato en Mongo</h4>
+              <ul>
+                <li><code>DateField</code> en vez de <code>DateTimeField</code></li>
+                <li><code>DecimalField</code> en vez de <code>FloatField</code></li>
+                <li><code>int()</code> sobre un campo decimal en <code>get_queryset</code></li>
+              </ul>
+            </div>
+            <div class="cmp-card">
+              <h4>🐛 Variable "data" inconsistente</h4>
+              <ul>
+                <li><code>data = serializer.validated_data</code> + <code>setdefault</code></li>
+                <li>pero luego <code>insert_one(serializer.validated_data)</code> en vez de <code>insert_one(data)</code></li>
+              </ul>
+            </div>
+            <div class="cmp-card">
+              <h4>🐛 Configuración de Expo Router</h4>
+              <ul>
+                <li><code>expo-router</code> instalado pero sin usar → bloquea el arranque</li>
+                <li><code>web.output: "static"</code> requiere expo-router</li>
+                <li>Solución: <code>npm uninstall expo-router</code> + limpiar <code>node_modules</code></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<footer class="page-footer">Guía de estudio personal · construida sobre las sesiones de práctica · nomenclatura de referencia: Vehículos (Marca/Vehiculo)</footer>
+
+<script>
+/* ============ TABS ============ */
+const tabs = document.querySelectorAll('.tab-btn');
+const panels = document.querySelectorAll('.panel');
+
+function activateTab(tabName){
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+  panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + tabName));
+  buildSidebar(tabName);
+  window.scrollTo({top:0, behavior:'instant'});
+  localStorage.setItem('guia_lastTab', tabName);
+}
+
+tabs.forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab)));
+
+/* ============ SIDEBAR (auto-generado desde los <h2> de cada panel) ============ */
+function buildSidebar(tabName){
+  const panel = document.getElementById('panel-' + tabName);
+  const sidebar = document.getElementById('sidebar');
+  const sections = panel.querySelectorAll('section.doc');
+  let html = '<div class="toc-eyebrow">En esta sección</div>';
+  sections.forEach(sec => {
+    const h2 = sec.querySelector('h2');
+    if(!h2) return;
+    const label = h2.textContent.replace(/^\S+/, '').trim() || h2.textContent.trim();
+    html += `<a class="toc-link" href="#${sec.id}" data-target="${sec.id}">${label}</a>`;
+  });
+  sidebar.innerHTML = html;
+
+  sidebar.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const el = document.getElementById(link.dataset.target);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+/* Scroll-spy: resalta el link activo del sidebar según scroll */
+let spyTicking = false;
+function updateActiveSidebarLink(){
+  const activePanel = document.querySelector('.panel.active');
+  if(!activePanel) return;
+  const sections = activePanel.querySelectorAll('section.doc');
+  let currentId = null;
+  sections.forEach(sec => {
+    const rect = sec.getBoundingClientRect();
+    if(rect.top <= 150) currentId = sec.id;
+  });
+  document.querySelectorAll('.toc-link').forEach(link => {
+    link.classList.toggle('active', link.dataset.target === currentId);
+  });
+  spyTicking = false;
+}
+window.addEventListener('scroll', () => {
+  if(!spyTicking){
+    requestAnimationFrame(updateActiveSidebarLink);
+    spyTicking = true;
+  }
+});
+
+/* ============ COPIAR CÓDIGO ============ */
+function copyCode(btn){
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const original = btn.textContent;
+    btn.textContent = 'copiado ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1400);
+  });
+}
+
+/* ============ BUSCADOR ============ */
+const searchBox = document.getElementById('searchBox');
+searchBox.addEventListener('input', () => {
+  const q = searchBox.value.trim().toLowerCase();
+  const activePanel = document.querySelector('.panel.active');
+  const sections = activePanel.querySelectorAll('section.doc');
+  if(!q){
+    sections.forEach(s => s.style.display = '');
+    return;
+  }
+  sections.forEach(sec => {
+    const match = sec.innerText.toLowerCase().includes(q);
+    sec.style.display = match ? '' : 'none';
+  });
+});
+
+/* Si el buscador tiene texto y cambias de pestaña, límpialo para no confundir */
+tabs.forEach(btn => btn.addEventListener('click', () => { searchBox.value=''; }));
+
+/* ============ HERRAMIENTA: DIAGNÓSTICO DE PICKER ============ */
+let fieldCounter = 0;
+const defaultFields = [
+  {name:'vehiculo_id', type:'dyn'},
+  {name:'event_type', type:'fix'},
+  {name:'source', type:'fix'},
+];
+
+function renderFieldRow(name, type){
+  fieldCounter++;
+  const id = 'f'+fieldCounter;
+  const row = document.createElement('div');
+  row.className = 'field-row';
+  row.id = id;
+  row.innerHTML = `
+    <input type="text" placeholder="nombre_del_campo" value="${name || ''}">
+    <div class="toggle-btns">
+      <button class="toggle-btn" data-type="dyn" data-active="${type==='dyn'}" onclick="setFieldType('${id}','dyn')">Dinámico</button>
+      <button class="toggle-btn" data-type="fix" data-active="${type==='fix'}" onclick="setFieldType('${id}','fix')">Fijo</button>
+    </div>
+    <button class="rm-field" onclick="removeField('${id}')" title="quitar">✕</button>
+  `;
+  document.getElementById('fieldsContainer').appendChild(row);
+  row.querySelector('input').addEventListener('input', computeDiagnosis);
+}
+
+function addField(){
+  renderFieldRow('', 'dyn');
+  computeDiagnosis();
+}
+
+function removeField(id){
+  const el = document.getElementById(id);
+  if(el) el.remove();
+  computeDiagnosis();
+}
+
+function setFieldType(id, type){
+  const row = document.getElementById(id);
+  row.querySelectorAll('.toggle-btn').forEach(b => {
+    b.dataset.active = (b.dataset.type === type);
+  });
+  computeDiagnosis();
+}
+
+function computeDiagnosis(){
+  const rows = document.querySelectorAll('#fieldsContainer .field-row');
+  let dynCount = 0, fixCount = 0;
+  const dynNames = [], fixNames = [];
+  rows.forEach(row => {
+    const name = row.querySelector('input').value.trim() || '(sin nombre)';
+    const activeBtn = row.querySelector('.toggle-btn[data-active="true"]');
+    const type = activeBtn ? activeBtn.dataset.type : 'dyn';
+    if(type === 'dyn'){ dynCount++; dynNames.push(name); }
+    else { fixCount++; fixNames.push(name); }
+  });
+
+  const resultBox = document.getElementById('diagResult');
+  if(rows.length === 0){
+    resultBox.innerHTML = '<span style="color:var(--text-dim)">Agrega los campos de tu serializer para ver el diagnóstico.</span>';
+    return;
+  }
+
+  let patternMsg = '';
+  if(dynCount >= 2){
+    patternMsg = `Usa el <b>Patrón A</b> (2+ Pickers dinámicos) — <code>Promise.all</code> con ${dynCount + 1} llamadas.`;
+  } else if(dynCount === 1 && fixCount >= 1){
+    patternMsg = `Usa el <b>Patrón B</b> (1 dinámico + ${fixCount} fijo${fixCount>1?'s':''}) — <code>Promise.all</code> con 2 llamadas, y ${fixCount} array${fixCount>1?'s':''} <code>as const</code>.`;
+  } else if(dynCount === 1 && fixCount === 0){
+    patternMsg = `Solo tienes 1 referencia real — probablemente no necesitas Picker adicional, solo el de <b>${dynNames[0]}</b>.`;
+  } else {
+    patternMsg = `Todos tus campos son fijos — no necesitas ninguna llamada extra a otra API, solo arrays <code>as const</code>.`;
+  }
+
+  resultBox.innerHTML = `
+    <div class="row"><span>Pickers <span class="pill dyn">dinámicos</span></span><b>${dynCount} ${dynNames.length ? '— ' + dynNames.join(', ') : ''}</b></div>
+    <div class="row"><span>Pickers <span class="pill fix">fijos</span></span><b>${fixCount} ${fixNames.length ? '— ' + fixNames.join(', ') : ''}</b></div>
+    <div class="row" style="border-top:1px solid var(--border);margin-top:6px;padding-top:10px;">${patternMsg}</div>
+  `;
+}
+
+/* Precargar el ejemplo por defecto */
+defaultFields.forEach(f => renderFieldRow(f.name, f.type));
+computeDiagnosis();
+
+/* ============ INIT ============ */
+const lastTab = localStorage.getItem('guia_lastTab') || 'backend';
+activateTab(tabs.length && document.getElementById('panel-'+lastTab) ? lastTab : 'backend');
+</script>
+</body>
+</html>
