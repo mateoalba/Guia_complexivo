@@ -122,6 +122,7 @@ export default function AdminReservationsPage() {
           </Stack>
 
           <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+
     <FormControl sx={{ width: 260 }}>
       <InputLabel id="status-label">Estado</InputLabel>
       <Select
@@ -136,6 +137,8 @@ export default function AdminReservationsPage() {
         <MenuItem value="ATTENDED">Atendido</MenuItem>
       </Select>
       </FormControl>
+
+      
             <TextField label="Fecha del Show"  type="datetime-local" value={showTime} onChange={(e) => setShowTime(e.target.value)} sx={{ width: 220 }} />
 
             <Button variant="contained" onClick={save}>{editId ? "Actualizar" : "Crear"}</Button>

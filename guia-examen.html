@@ -1375,7 +1375,39 @@ http.interceptors.request.use((config) => {
       /&gt;
     &lt;/View&gt;
   );
-}</code></pre>
+}
+
+<span class="tok-kw">const</span> styles = StyleSheet.create({
+  container: { flex: <span class="tok-num">1</span>, backgroundColor: <span class="tok-str">"#0d1117"</span>, padding: <span class="tok-num">16</span> },
+  title: { color: <span class="tok-str">"#58a6ff"</span>, fontSize: <span class="tok-num">22</span>, fontWeight: <span class="tok-str">"800"</span>, marginBottom: <span class="tok-num">10</span> },
+  error: { color: <span class="tok-str">"#ff7b72"</span>, marginBottom: <span class="tok-num">10</span> },
+  label: { color: <span class="tok-str">"#8b949e"</span>, marginBottom: <span class="tok-num">6</span>, marginTop: <span class="tok-num">6</span> },
+  input: {
+    backgroundColor: <span class="tok-str">"#161b22"</span>,
+    color: <span class="tok-str">"#c9d1d9"</span>,
+    padding: <span class="tok-num">12</span>,
+    borderRadius: <span class="tok-num">8</span>,
+    marginBottom: <span class="tok-num">10</span>,
+    borderWidth: <span class="tok-num">1</span>,
+    borderColor: <span class="tok-str">"#30363d"</span>,
+  },
+  btn: { backgroundColor: <span class="tok-str">"#21262d"</span>, borderColor: <span class="tok-str">"#58a6ff"</span>, borderWidth: <span class="tok-num">1</span>, padding: <span class="tok-num">12</span>, borderRadius: <span class="tok-num">8</span> },
+  btnText: { color: <span class="tok-str">"#58a6ff"</span>, textAlign: <span class="tok-str">"center"</span>, fontWeight: <span class="tok-str">"700"</span> },
+  row: {
+    backgroundColor: <span class="tok-str">"#161b22"</span>,
+    padding: <span class="tok-num">12</span>,
+    borderRadius: <span class="tok-num">8</span>,
+    marginBottom: <span class="tok-num">10</span>,
+    flexDirection: <span class="tok-str">"row"</span>,
+    justifyContent: <span class="tok-str">"space-between"</span>,
+    alignItems: <span class="tok-str">"center"</span>,
+    borderWidth: <span class="tok-num">1</span>,
+    borderColor: <span class="tok-str">"#30363d"</span>,
+  },
+  rowText: { color: <span class="tok-str">"#c9d1d9"</span>, fontWeight: <span class="tok-str">"800"</span> },
+  rowSub: { color: <span class="tok-str">"#8b949e"</span>, marginTop: <span class="tok-num">2</span> },
+  del: { color: <span class="tok-str">"#ff7b72"</span>, fontWeight: <span class="tok-str">"800"</span> },
+});</code></pre>
           </div>
 
           <div class="callout danger"><span class="ic"></span><div><b>Bug real que se repite:</b> cuando muestres campos opcionales (<code>note</code>, <code>created_at</code>) dentro de un <code>&lt;View style={styles.row}&gt;</code>, necesitas un <b>segundo</b> <code>&lt;View&gt;</code> interno envolviendo esos <code>&lt;Text&gt;</code> — si lo omites, el <code>&lt;/View&gt;</code> de cierre queda sin su apertura y el archivo <b>no compila</b>. Revisa el panel "Problems" de VS Code después de cualquier bloque JSX largo, antes de darlo por terminado.</div></div>
@@ -1501,6 +1533,697 @@ http.interceptors.request.use((config) => {
                 <li>Solución: <code>npm uninstall expo-router</code> + limpiar <code>node_modules</code></li>
               </ul>
             </div>
+          </div>
+        </section>
+
+
+        <section class="doc" id="u-teoria">
+          <h2>Repaso Teórico — Examen de 60 preguntas (jueves)</h2>
+          <p class="lede">67 preguntas: 52 del simulador real de un compañero + 15 de refuerzo agregadas en los temas que no practicamos en el backend/frontend/móvil (Seguridad, SCRUM, Testing/Ética/Linux). La opción correcta va marcada, con el porqué debajo.</p>
+          <h3>Módulo 1: Bases de Datos (MongoDB) <span style="font-weight:400;color:var(--text-dim);font-size:13px;">(10 originales + 2 de refuerzo)</span></h3>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">1. Necesitas insertar a la vez varios empleados nuevos y que cada uno conserve un _id legible como 'EMP-001', 'EMP-002', etc. ¿Qué método es el adecuado?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Hacer un insertOne() por cada empleado</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Usar insertMany() con un arreglo de documentos, cada uno con su _id ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Usar create() que genera los _id automáticamente</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Usar updateMany() con el arreglo de empleados</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> insertMany() recibe un arreglo de documentos y respeta el _id que tú indiques en cada uno en una sola operación; insertOne() solo admite uno a la vez.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">2. Tu consulta devuelve clientes con el campo _id, pero el reporte final no debe mostrarlo: solo necesita el nombre y la ciudad. ¿Qué proyección lo logra?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) db.clientes.find({}, { nombre: 1, _id: 0 }) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) db.clientes.find({ _id: 0 }, { nombre: 1 })</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) db.clientes.find({ nombre: 1, _id: 0 })</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) db.clientes.find({}, { nombre: 1, ciudad: 1 })</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El primer parámetro filtra (vacío busca todo), el segundo proyecta: 1 incluye nombre y 0 excluye el _id. El _id solo se omite si lo indicas explícitamente con 0.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">3. En una agregación necesitas el precio promedio de los productos agrupados por región (no la suma). ¿Qué etapa con qué acumulador lo resuelve?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) $match con $sum</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) $group con $avg ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) $sort con $sum</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) $count con $avg</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> $group permite acumular por grupo; $avg calcula el promedio del campo indicado, mientras que la suma usaría $sum.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">4. Tienes deudas pendientes y quieres marcarlas como 'PAGADA' y guardar la fecha de pago en el mismo documento, sin borrar el resto de datos. ¿Qué operación es correcta?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) updateMany con $set que asigne ambos campos a la vez ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) updateOne con $set que asigne únicamente el estado</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) updateMany con $push sobre el campo estado</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) replaceOne que escriba solo { estado: 'PAGADA' }</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> $set permite agregar o actualizar varios campos en una misma operación sin tocar el resto del documento, y updateMany() aplica el cambio a todos los que coinciden con el filtro.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">5. Quieres recuperar únicamente los pedidos que tengan a la vez TODAS las etiquetas del arreglo ['urgente', 'cliente-vip']. ¿Qué operador es el correcto?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) $in</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) $all ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) $exists</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) $or</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> $all exige que el arreglo del documento contenga todos los valores indicados; $in acepta que coincida con al menos uno y $exists solo verifica que el campo exista.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">6. Tienes la colección 'logs' y necesitas los errores ocurridos entre el 1 de enero y el 31 de enero de 2026. ¿Qué filtro de rango de fechas es el correcto?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) { fecha: { $in: ['2026-01-01', '2026-01-31'] } }</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) { fecha: { $regex: '/^2026-01/' } }</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) { fecha: { $gte: new Date('2026-01-01'), $lte: new Date('2026-01-31') } } ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) { fecha: { $nin: ['2026-01-01', '2026-01-31'] } }</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Para rangos de fechas se combinan operadores de comparación como $gte (mayor o igual) y $lte (menor o igual) sobre fechas reales; $in o $regex no modelan un intervalo continuo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">7. En una agregación quieres enriquecer cada pedido con los datos de su cliente, que viven en la colección 'clientes' y están relacionados por el campo clienteId. ¿Qué etapa combina esas colecciones?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) $unwind</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) $out</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) $geoNear</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">D) $lookup ✓</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> $lookup es el equivalente a un left join: une documentos de dos colecciones usando un campo en común y agrega el resultado como un arreglo en el documento.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">8. Cada vez que un usuario entra a tu tienda, quieres sumar 1 al contador 'visitas' del producto sin reescribir los demás campos. ¿Qué operador usa la actualización?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) $set</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) $inc ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) $push</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) $rename</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> $inc incrementa (o decrementa) en la cantidad indicada un campo numérico sin tocar el resto del documento; $set lo fijaría a un valor y $push agrega a un arreglo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">9. Al insertar un documento sin especificar el _id, MongoDB genera uno automáticamente. ¿Qué tipo de dato es ese identificador?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Un entero global que va aumentando en toda la base de datos</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Un ObjectId de 12 bytes representado como cadena hexadecimal de 24 caracteres ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Un UUID de 8 caracteres consecutivos</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) La fecha exacta de la inserción como texto</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El _id autogenerado es un ObjectId (12 bytes, 24 caracteres hex): único, ordenable y propio del formato BSON de MongoDB.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">10. Cada fin de mes debes eliminar todas las sesiones de usuario que ya están vencidas y que coinciden con el campo vencida: true. ¿Qué operación borra exactamente los que cumplan el filtro?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) updateOne({ vencida: true }, { $set: { estado: 'baja' } })</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) insertMany([{ vencida: true }])</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) drop({ vencida: true })</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">D) deleteMany({ vencida: true }) ✓</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> deleteMany() elimina todos los documentos que cumplen el filtro; deleteOne() borraría solo el primero y drop() elimina la colección completa, sin filtro.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">11. Quieres que las búsquedas frecuentes por el campo "email" en una colección con miles de documentos sean rápidas. ¿Qué deberías crear? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) Un índice sobre el campo email ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Duplicar la colección completa</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Un campo virtual calculado</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Una vista materializada</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Un índice permite a Mongo localizar documentos sin recorrer toda la colección ("collection scan"). Sin índice, cada búsqueda por email revisaría documento por documento.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">12. ¿Cuál es la diferencia principal entre find() y aggregate() en MongoDB? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) find() solo lee un documento; aggregate() lee varios</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) find() filtra documentos tal cual están guardados; aggregate() permite transformar y agrupar datos mediante un pipeline de etapas ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Son exactamente la misma operación con distinto nombre</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) aggregate() no admite ningún tipo de filtro</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> find() devuelve documentos que cumplen un filtro, sin transformarlos. aggregate() encadena etapas ($match, $group, $project...) para calcular totales, agrupar, o remodelar los datos.</div></div>
+          </div>
+          <h3>Módulo 2: Frontend, React y Desarrollo Móvil <span style="font-weight:400;color:var(--text-dim);font-size:13px;">(10 originales + 2 de refuerzo)</span></h3>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">1. Tienes un input controlado con useState y escribes una letra. El componente se vuelve a renderizar en cada tecla. ¿Por qué ocurre?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Cada tecla dispara una recarga completa de la página</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) El onChange actualiza el estado y React vuelve a renderizar el componente con el nuevo valor ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) El evento keydown del navegador refresca el Virtual DOM</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) React destruye y recrea toda la aplicación con cada tecla</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> En un input controlado, cada pulsación llama al setter que actualiza el estado; React detecta el cambio y re-renderiza el componente, sin recargar la página.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">2. ¿Cuál de las siguientes afirmaciones describe correctamente la comunicación entre componentes en React?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Los hijos pueden modificar directamente el estado del padre escribiendo sobre sus props</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Los datos fluyen del padre hacia el hijo mediante props, en una sola dirección ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Los componentes hermanos comunican sus estados reescribiendo el DOM</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Las props pueden modificarse desde el componente que las recibe</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> React usa flujo unidireccional: el padre entrega datos al hijo por props y el hijo notifica cambios llamando funciones que el padre le pasó; nunca muta sus props.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">3. En una app React Native, el contenido de la pantalla de inicio queda oculto bajo la zona de la cámara (notch) del iPhone. ¿Qué componente evita que el contenido invada esa área?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) View</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) SafeAreaView ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) ScrollView</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) KeyboardAvoidingView</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> SafeAreaView ajusta el contenido dentro de las áreas seguras del dispositivo (notch, esquinas redondeadas); View no conoce esas zonas y ScrollView solo desplaza el contenido.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">4. Tu equipo no tiene instalado ningún entorno Expo y necesitas arrancar un proyecto de React Native desde cero. ¿Qué comando se utiliza?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) npx create-react-app</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) npm create vite</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) npx create-expo-app ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) expo run-android</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> create-expo-app inicializa un proyecto Expo con toda la configuración (app.json, archivos iniciales); create-react-app crea proyectos web y create vite no es la vía de Expo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">5. Debes llamar a una API con fetch exactamente una sola vez, cuando el componente se monta, y no volver a ejecutarla con los re-renders. ¿Qué depende escribes en el useEffect?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Ningún arreglo: useEffect(() =&gt; { ... })</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Un estado que cambia en cada render</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) Un arreglo vacío: useEffect(() =&gt; { ... }, []) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) useMemo(() =&gt; { ... }, []) con el mismo cuerpo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Un arreglo de dependencias vacío hace que el efecto se ejecute una única vez tras el montaje inicial; sin arreglo se ejecuta en cada render.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">6. Debes mostrar un chat con miles de mensajes y quieres que la app sea fluida cargando solo los elementos visibles en pantalla. ¿Qué componente de React Native eliges?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) ScrollView con un map() sobre los mensajes</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) View con un map() sobre los mensajes</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) FlatList con data y renderItem ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) TextInput multiline para juntar todos los mensajes</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> FlatList virtualiza la lista: solo monta los elementos visibles y recicla el resto, ideal para listas largas y dinámicas; ScrollView renderiza todo de golpe y el map sobre View también.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">7. En React Native necesitas que el texto de un campo se actualice en pantalla a medida que el usuario escribe y que ese valor persista entre renders. ¿Qué Hook usas?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) useRef, para que el componente nunca se re-renderice al escribir</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) useState, para controlar el valor del TextInput y renderizar cada cambio ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) useMemo, para memorizar el texto de una vez</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) useEffect, para leer el texto del campo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> useState guarda el texto en el estado y React re-renderiza al cambiar; useRef no provoca render y useMemo no actualiza el valor controlado del campo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">8. En TypeScript quieres tipar la respuesta de una petición a /api/usuario que devuelve un objeto con nombre, correo y rol. ¿Qué construcción define la forma de ese objeto?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) interface Usuario { nombre: string; correo: string; rol: string } ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) class Usuario { nombre; correo; rol }</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) let Usuario = { nombre: string, correo: string }</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) enum Usuario { nombre, correo, rol }</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> interface describe la estructura (forma) de un objeto y es la opción típica para tipar una respuesta; class es más para instancias con lógica y enum define valores fijos.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">9. En una función async haces una petición a una API que puede fallar por red. ¿Qué estructura de control asegura capturar el error sin romper la app?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Una promesa sin el bloque catch, solo con then</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) try { await fetch(...) } catch (error) { manejarError(error) } ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Un while que itere hasta recibir respuesta</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Un switch que evalúe el estado HTTP</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> try/catch captura excepciones (incluida una promesa rechazada con await) y permite manejar el error; sin catch, el rechazo quedaría sin gestionar.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">10. Tu app necesita que el idioma y el tema claro/oscuro sean globales y usados por componentes de varias ramas de la jerarquía, sin pasar props por cada nivel intermedio. ¿Qué API nativa de React resuelve esto?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Prop Drilling manual</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Context API con un Provider y useContext ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) React Router</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Un arreglo global declarado en cada archivo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Context API permite definir un valor que cualquier componente del árbol lee con useContext sin prop drilling; React Router sirve para rutas y un arreglo global no es la vía idiomática.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">11. En un componente de React, ¿qué controla el segundo argumento (el array de dependencias) de useEffect? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) No hace nada, es solo decorativo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Cuándo se vuelve a ejecutar el efecto: solo cuando cambia alguno de esos valores entre renders ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) El orden en que se pintan los componentes</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) El valor inicial del estado del componente</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> React compara los valores del array entre un render y el siguiente; si alguno cambió, vuelve a correr el efecto. Un array vacío [] significa "ejecutar solo una vez, al montar".</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">12. ¿Qué diferencia hay entre state y props en React? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Son exactamente lo mismo con distinto nombre</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) props son datos que un componente recibe de su padre (solo lectura); state es la memoria interna que el propio componente controla y puede cambiar ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) props solo existen en aplicaciones móviles</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) state nunca puede pasarse hacia un componente hijo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> props fluyen de padre a hijo en una sola dirección y el hijo no las modifica directamente; state es el dato interno de un componente, gestionado normalmente con useState.</div></div>
+          </div>
+          <h3>Módulo 3: Seguridad, Ciberseguridad y Normativas <span style="font-weight:400;color:var(--text-dim);font-size:13px;">(10 originales + 4 de refuerzo)</span></h3>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">1. Contratas dos pentests: en uno entregan al proveedor acceso al código fuente y documentación interna, y en el otro no le entregan nada de información. ¿Cómo se clasifican respectivamente?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Caja gris y caja gris</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Caja blanca y caja negra ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Caja negra y caja blanca</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Prueba de carga y prueba de humo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> En caja blanca el tester conoce la implementación interna (código, docs); en caja negra se prueba sin conocimiento interno, como un atacante externo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">2. Tu organización ya certificó su SGSI con ISO/IEC 27001 y ahora quiere una guía práctica de los controles de seguridad recomendados. ¿Qué norma complementaria la entrega?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) ISO/IEC 25010</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) ISO/IEC 27002 ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) ISO 9001</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) CMMI</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> 27001 define los requisitos del sistema de gestión (qué debe cumplir); 27002 es la guía que describe los controles de seguridad recomendados cómo implementarlos.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">3. En autenticación se clasifican los factores como 'algo que se sabe', 'algo que se tiene' y 'algo que se es'. ¿Dónde encaja la huella dactilar?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) En algo que se sabe (conocimiento)</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) En algo que se tiene (dispositivo)</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) En algo que se es (factor biométrico inherente) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) En una contraseña de un solo uso</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Los factores biométricos (huella, rostro) representan 'algo que se es': características inherentes de la persona, distintas del conocimiento y de lo que se posee.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">4. Descargas una imagen ISO enorme y quieres confirmar antes de usarla que el archivo no se dañó en la transferencia. ¿Qué usas, dado que la página oficial publica un valor SHA-256?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Cifrar la ISO con una clave secreta</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Calcular el hash SHA-256 local del archivo y compararlo con el publicado ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Descomprimirla con gzip y ver la fecha de creación</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Abrirla en el navegador y leer el contenido</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El hash (SHA-256) es un resumen de una sola vía: si el hash coincide, el archivo está íntegro y no fue alterado; cifrarlo o abrirlo no verifica integridad.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">5. Un tercero te envía un correo cifrado con tu clave pública. ¿Con qué clave podrás leerlo?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Con tu clave pública</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Con la clave pública del emisor</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) Con tu clave privada ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Con la clave privada del emisor</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> En el cifrado asimétrico, lo que se cifra con la clave pública solo puede descifrarse con la privada que le corresponde; tu privada nunca sale de tu dispositivo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">6. El mensaje 'EL LANZAMIENTO ES MAÑANA' viaja disimulado dentro de un archivo de audio que nadie sospecharía. ¿Qué técnica de ocultación se está usando?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Cifrado simétrico</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Firma digital</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) Esteganografía ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Un hash con salt</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> La esteganografía esconde el mensaje dentro de otro medio (audio, imagen, video) para que la propia existencia de la comunicación pase desapercibida.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">7. Vas a configurar acceso SSH por clave pública en tu servidor. ¿Qué herramienta genera el par de llaves (pública y privada)?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) ssh-keygen ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) openssl enc -base64</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) gpg --symmetric</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) useradd -m</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> ssh-keygen crea el par de llaves (por defecto id_ed25519 o id_rsa): la pública se instala en el servidor y la privada permanece en la estación del usuario.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">8. Un atacante modifica el id de la URL (/perfil?id=105) y acierta a ver el perfil de otro usuario. Según OWASP, ¿a qué categoría pertenece este fallo?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) A inyección de código</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) A un ataque XSS en el navegador</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) A un control de acceso a nivel de objeto (IDOR) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) A falta de política de cookies</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Es una falla de autorización: el servidor permite acceder a un objeto (perfil) sin verificar que el usuario tiene permiso para ese id en particular (IDOR, control de acceso a nivel de objeto).</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">9. Publicas un formulario de comentarios y un usuario escribe código de un script en el texto: cuando otro usuario abre ese comentario, el navegador ejecuta el código incrustado. ¿Qué ataque es?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) Cross-Site Scripting (XSS) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Inyección SQL</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) DDoS</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Phishing</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> XSS ocurre cuando se inyecta código que el navegador ejecuta al renderizar contenido no confiable; aquí el script se ejecuta en la sesión de otros usuarios.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">10. Al entrar a tu banca con https, el navegador acepta el certificado emitido por una autoridad de confianza. Además de cifrar el canal, ¿qué aporta el certificado?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Garantiza que el sitio está libre de virus</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Confirma que el servidor es quien dice ser (autentica la identidad) y cifra la comunicación ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Borra el historial del navegador del usuario</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Aumenta la velocidad de descarga de la página</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El certificado de una CA vincula la identidad del sitio con su clave pública: el cliente verifica que no está hablando con un impostor y que el canal queda cifrado.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">11. ¿Qué es un ataque de "SQL Injection"? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Sobrecargar un servidor enviándole miles de peticiones</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Insertar código SQL malicioso a través de un campo de entrada que la aplicación no valida ni sanitiza, para manipular la base de datos ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Robar las cookies de sesión de un usuario</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Interceptar el tráfico de red entre dos equipos</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Ocurre cuando la aplicación concatena directamente el texto que escribe el usuario dentro de una consulta SQL, sin usar parámetros preparados/ORM — permitiendo que el atacante inyecte sus propios comandos SQL.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">12. ¿Cuál es la mejor práctica para almacenar contraseñas de usuarios en una base de datos? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Guardarlas en texto plano para poder recuperarlas fácilmente</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Cifrarlas con un algoritmo reversible que se pueda desencriptar</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) Aplicarles un hash con una función especializada (ej. bcrypt) más "salt" — nunca texto plano ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Guardarlas en un archivo de texto aparte, fuera de la base de datos</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El hashing con salt (bcrypt, Argon2) es de una sola vía — no se puede "desencriptar". Protege las contraseñas incluso si la base de datos se filtra. Es justo lo que hace create_user() de Django por dentro.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">13. ¿Qué significa el principio de "menor privilegio" en seguridad informática? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) Dar a cada usuario o proceso solo los permisos mínimos necesarios para cumplir su función ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Dar acceso total a todos los usuarios para simplificar la administración</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Usar siempre la cuenta root/administrador para todo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Cambiar todas las contraseñas cada 24 horas</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Reduce la superficie de ataque: si una cuenta se compromete, el daño posible queda limitado a lo que esa cuenta podía hacer. Es el mismo principio detrás de los "permisos mínimos" que practicaste en los ejercicios de administración de BD.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">14. ¿Por qué es importante HTTPS frente a HTTP simple? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Es lo mismo que HTTP pero con mejor velocidad de carga</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) HTTPS cifra la comunicación entre cliente y servidor usando TLS/SSL, evitando que alguien en la misma red intercepte o modifique los datos ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) HTTPS solo tiene efecto sobre imágenes y archivos multimedia</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) HTTP ya es seguro por defecto en redes privadas</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> TLS/SSL cifra el canal completo — sin eso, cualquiera con acceso a la red (ej. un WiFi público) podría leer contraseñas, tokens o datos personales que viajan entre el navegador y el servidor.</div></div>
+          </div>
+          <h3>Módulo 4: Gestión de Proyectos, SCRUM y Ágil <span style="font-weight:400;color:var(--text-dim);font-size:13px;">(10 originales + 4 de refuerzo)</span></h3>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">1. El equipo interno de infraestructura pacta con el de desarrollo unos tiempos de respuesta entre áreas. ¿Cómo se llama el acuerdo de nivel de servicio cuando ambas partes pertenecen a la misma organización?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) SLA (externo)</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) OLA (Acuerdo de Nivel Operativo) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Un KPI de negocio</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Una matriz RACI</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El OLA (Operational Level Agreement) es el pacto de niveles entre equipos internos de la organización; el SLA es el contrato de niveles con un proveedor o cliente externo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">2. Termina el Sprint y el equipo se reúne para revisar qué funcionó, qué no y qué cambiará en el proceso de cara al siguiente ciclo. ¿Qué ceremonia es esta?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Sprint Planning</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Sprint Review</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) Retrospectiva ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Daily Standup</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> La retrospectiva es la ceremonia de mejora continua: el equipo analiza su forma de trabajar y define acciones concretas; la review muestra el producto al cliente.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">3. El cliente aprueba los requisitos, pero en cada revisión vuelve a añadir 'detalles mínimos' que nadie terminó de dimensionar y el alcance crece sin control. ¿Cómo se denomina este fenómeno?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Gold plating</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Scope creep ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Refactorización</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Parkinson</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El scope creep es el crecimiento descontrolado del alcance solicitado; el gold plating es el caso contrario: el equipo agrega extras por su cuenta, sin que el cliente los pida.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">4. Antes de iniciar un Sprint, el equipo selecciona historias del Product Backlog y se compromete con un objetivo para el ciclo. ¿Qué ceremonia formaliza esa selección y compromiso?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) Sprint Planning ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Sprint Review</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Retrospectiva</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Daily Standup</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> La Sprint Planning define el objetivo, las historias que entran y la forma de lograrlas; el alcance elegido queda fijado para el Sprint.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">5. En Kanban quieres saber el tiempo que pasa una tarjeta desde que entra a la columna inicial hasta que sale como terminada. ¿Qué métrica estás midiendo?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) Tiempo de ciclo (cycle time) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Burndown del Sprint</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) El índice de desempeño del costo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) La velocidad del equipo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El cycle time mide cuánto tarda un ítem de principio a fin del flujo; el burndown sigue el trabajo restante del Sprint y no individualiza tarjetas de esa forma.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">6. ¿Cuál de las siguientes NO es una responsabilidad del Scrum Master en las prácticas ágiles?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Facilitar las ceremonias y proteger al equipo de interrupciones</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Ayudar a remover los impedimentos que bloquean al equipo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Promover la autoorganización y la mejora continua</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">D) Controlar y evaluar el desempeño individual de cada desarrollador ✓</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El Scrum Master es un facilitador servicial, no un jefe: no evalúa ni controla el desempeño de las personas; la autoorganización y la transparencia son del equipo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">7. Tu equipo está repartido entre ciudades con 7 horas de diferencia y no coincide más que 1 hora a la mañana. ¿Qué práctica de comunicación es la adecuada?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Imponer reuniones diarias de 2 horas al mediodía para todos</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Usar el pequeño solapamiento para reuniones breves y el resto de la comunicación de forma asíncrona documentada ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Cada ciudad trabaja en silos sin compartir avances</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Centralizar toda la comunicación en el correo del líder</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Con zonas horarias opuestas se aprovecha el solapamiento breve para lo urgente y se documenta el resto de forma asíncrona (tableros, grabaciones, comentarios), respetando los horarios de cada uno.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">8. En EVM, el índice SPI (Schedule Performance Index) es 0.85. ¿Qué indica esa lectura?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) El proyecto está retrasado respecto a lo planificado: el valor ganado es menor que lo planeado ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Está por debajo del presupuesto de costos</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Va por delante del calendario previsto</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Se entregó el 85 % del alcance final sin más trabajo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> SPI = valor ganado / valor planificado; un valor menor que 1 significa que se ha ganado menos de lo planeado en el mismo tiempo, o sea, retraso respecto al cronograma.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">9. Termina el Sprint y el incremento debe demostrarse al Product Owner y al cliente para obtener retroalimentación. ¿Qué ceremonia cumple ese propósito?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) Sprint Review (Demo) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Sprint Planning</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Retrospectiva</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Refinamiento del Backlog</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> La Sprint Review presenta el incremento terminado y recibe la retroalimentación del cliente y de stakeholders; la retrospectiva se enfoca en el proceso interno.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">10. Para considerar una historia como terminada y apta para el Sprint Review, el equipo usa un criterio escrito que define cuándo se cumple realmente (pruebas, código, documentación, aceptación). ¿Cómo se llama este criterio?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Definition of Ready</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Definition of Done ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Un SLA</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Un acuerdo de nivel operativo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> La Definition of Done (Definición de Terminado) son los criterios que una historia debe cumplir para considerarse terminada; la Definition of Ready evalúa si la historia está lista para planificarse.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">11. En SCRUM, ¿qué es un "Sprint"? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Una reunión diaria del equipo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Un periodo de tiempo fijo y corto (normalmente 1 a 4 semanas) en el que el equipo trabaja para entregar un incremento del producto ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) El rol responsable de liderar y priorizar el trabajo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) El documento inicial de requisitos del proyecto</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El Sprint es la "caja de tiempo" central de SCRUM. Al final de cada Sprint se busca tener un incremento potencialmente entregable del producto.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">12. ¿Cuál es la función principal del Product Owner en SCRUM? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Escribir directamente el código de la aplicación</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Gestionar y priorizar el Product Backlog, representando la voz del negocio/cliente ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Remover los impedimentos técnicos del equipo de desarrollo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Ejecutar las pruebas de control de calidad (QA)</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El Product Owner decide QUÉ se construye y en qué orden (prioriza el backlog). El Scrum Master facilita el proceso; el equipo de desarrollo decide CÓMO construirlo técnicamente.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">13. ¿Qué diferencia hay entre el Daily Scrum y el Sprint Review? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Son el mismo evento, solo con nombres distintos</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) El Daily es una sincronización corta y diaria del equipo sobre su avance; el Sprint Review es al final del sprint, para mostrar el incremento a los interesados (stakeholders) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) El Sprint Review ocurre todos los días</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) El Daily lo realiza únicamente el Product Owner, sin el equipo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El Daily Scrum (≈15 min) sincroniza al equipo día a día sobre avances y bloqueos. El Sprint Review presenta el trabajo ya terminado a los stakeholders para recibir retroalimentación, al cierre del sprint.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">14. ¿Qué es el "Backlog Refinement" (o Grooming)? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Borrar del backlog las tareas ya completadas</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) La actividad continua de revisar, detallar y priorizar los elementos del Product Backlog para que estén listos de cara a futuros sprints ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) La reunión retrospectiva al cierre de un sprint</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) El evento donde formalmente se cierra un sprint</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El refinamiento mantiene el backlog claro, bien estimado y priorizado — evita que el Sprint Planning se alargue por historias mal definidas o ambiguas.</div></div>
+          </div>
+          <h3>Módulo 5: DevOps, Linux, Testing y Ética <span style="font-weight:400;color:var(--text-dim);font-size:13px;">(12 originales + 4 de refuerzo)</span></h3>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">1. Un creador publica su obra con la licencia Creative Commons 'BY-NC'. ¿Qué uso NO está permitido sin un acuerdo aparte?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Usar la obra dando el crédito del autor</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Un uso con fines comerciales del contenido ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Compartir la obra indicando la atribución</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Usarla en una presentación personal sin ánimo de lucro</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> NC (No Comercial) prohíbe los usos comerciales de la obra; el crédito obligatorio en CC siempre es el atributo 'BY', aunque con NC el alcance no llega a fines comerciales.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">2. Según el modelo ISO/IEC 25010, la dimensión que protege los datos para que solo accedan a ellos quienes tienen autorización es:</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) Seguridad ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Usabilidad</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Portabilidad</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Mantenibilidad</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> En ISO 25010, 'Seguridad' cubre la protección de la información (confidencialidad, integridad, autenticidad, no repudio) con acceso solo autorizado; las otras son dimensiones distintas.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">3. En Karate DSL escribes: Given url base + '/usuarios' And request { nombre: 'Ana' } When method post Then status 201. ¿Qué valida el estado 201?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Que la petición fue autorizada</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Que el recurso fue creado correctamente ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Que el recurso no existe en el servidor</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Que el servidor redirige a otra URL</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> 201 Created es la respuesta estándar cuando una petición POST crea un recurso; 200 es una respuesta genérica exitosa y 404 indica que no existe.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">4. En el reporte de una prueba de carga con k6 lees que el p95 de una endpoint es de 5 segundos. ¿Qué significa exactamente?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) El 95 % de las peticiones fueron más lentas que 5 segundos</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) El 5 % de las peticiones falló con error 500</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) El 95 % de las peticiones respondieron a 5 segundos o menos, y el 5 % más lento tardó más ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) 100 de cada 95 peticiones tardaron exactamente 5 segundos</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El percentil 95 indica que el 95 % de las respuestas estuvieron dentro de ese tiempo o por debajo, mientras el 5 % peor quedó por encima; es útil para ver la latencia en condiciones de carga.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">5. Verificación y validación no son lo mismo en aseguramiento de la calidad. Una prueba que confirma que el software cumple las necesidades reales y aprobadas del cliente es un ejemplo de:</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Verificación: se construyó bien el producto</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Validación: se construyó el producto correcto ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Control de versiones</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Prueba de rendimiento</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> La validación responde '¿construimos lo correcto?' contra las necesidades del cliente; la verificación responde '¿lo construimos correctamente?' contra la especificación.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">6. Un administrador define umask 022 en su sesión. ¿Qué permisos por defecto tendrá un archivo nuevo que crea?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) 644 (dueño lee/escribe; grupo y otros leen) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) 600 (solo el dueño)</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) 777 (todos con todos los permisos)</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) 400 (solo lectura para el dueño)</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Sobre la base de archivos (666) se resta la máscara 022: el dueño conserva 6 (leer/escribir), y grupo y otros quedan en 4 (leer). Resultado: 644.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">7. Recibes el archivo 'backup.tar.gz' y necesitas extraer su contenido en el servidor. ¿Qué secuencia de comandos es la correcta?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) tar -czf backup.tar.gz</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) tar -xzf backup.tar.gz ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) gzip backup.tar.gz</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) unzip backup.tar.gz</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> -x extrae y -z maneja la compresión gzip: 'tar -xzf archivo.tar.gz' restaura el contenido; -c es para crear y -czf empaquetaría de nuevo.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">8. Un archivo tiene el permiso de lectura activado para 'otros' y no debe ser leído por usuarios ajenos al grupo. ¿Con qué comando revocas esa lectura para 'otros'?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">A) chmod o-r archivo ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) chmod a+r archivo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) chmod u-r archivo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) chmod g-w archivo</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> chmod o-r quita ('-') la lectura ('r') a 'otros' ('o'); a+r la agregaría a todos y u-r quitaría la del dueño, no la requerida.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">9. Desde la terminal necesitas localizar, dentro de /var/log, todos los archivos cuyo nombre contenga la cadena 'error'. ¿Qué comando usas?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) ls /var/log</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) cat error</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) find /var/log -name '*error*' ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) grep -$pi /var/log</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> find recorre el árbol de directorios buscando archivos que cumplan condiciones (aquí el nombre); cat muestra contenido y ls solo enlista el directorio actual.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">10. El código ya pasó el pipeline de CI y ahora quieres que cada versión validada se publique automáticamente en un entorno de producción de forma continua. ¿Qué práctica automatiza ese despliegue?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Integración manual nocturna</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Entrega Continua / Despliegue Continuo (CD) ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Aseguramiento de calidad reactivo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Un snapshot manual de la base de datos</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> CI integra y valida el código; CD (Continuous Delivery/Deployment) automatiza la entrega y el despliegue de cada versión validada, reduciendo tiempos y errores manuales en el pase a producción.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">11. En la prueba de un módulo conoces la entrada y la salida esperada pero no el código interno que lo implementa. Tu caso de prueba se diseña únicamente desde la especificación. ¿Qué tipo de prueba es?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Prueba de caja blanca</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Prueba de caja negra ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Prueba de migración de datos</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Prueba de estrés del servidor</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> La caja negra evalúa el comportamiento funcional sin conocer la implementación interna, usando entradas y salidas esperadas; la caja blanca se diseña con base en el código.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">12. Encuentras una foto perfecta en internet, pero su autor indica '© Todos los derechos reservados' y no menciona licencia abierta. ¿Qué acción es la correcta desde el punto de vista ético y legal?</p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Usarla igual porque 'si está en internet es libre'</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">B) Ocultar la fuente para evitar problemas</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">C) Revisar la licencia, y si el uso no está permitido, pedir permiso al autor o buscar recursos con licencia abierta ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Añadir una marca de agua ajena y publicarla</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> El copyright de 'todos los derechos reservados' prohíbe usos no autorizados: la ética y la norma exigen respetar la licencia y pedir autorización o elegir obras con licencias abiertas (CC, dominio público).</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">13. ¿Qué hace el comando chmod +x archivo.sh en Linux? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Cambia el dueño (owner) del archivo</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Otorga permiso de ejecución al archivo ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Borra el archivo del sistema</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Comprime el archivo en formato .tar</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> chmod modifica los permisos de un archivo; +x agrega específicamente el permiso de ejecución, necesario para poder correr un script directamente con ./archivo.sh.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">14. ¿Cuál es la diferencia entre pruebas unitarias y pruebas de integración? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Son exactamente lo mismo con distinto nombre</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Las unitarias prueban una pieza de código aislada (ej. una función); las de integración verifican que varias piezas o módulos funcionen bien en conjunto ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Las de integración siempre son más rápidas de ejecutar</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Las pruebas unitarias siempre prueban la aplicación completa de punta a punta</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> Las pruebas unitarias aíslan una unidad de código (mockeando sus dependencias externas). Las de integración verifican la interacción real entre componentes, como una API hablando de verdad con la base de datos.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">15. ¿Qué significa CI/CD? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Un lenguaje de programación para automatización</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Integración Continua / Entrega Continua: prácticas para automatizar la construcción, prueba y despliegue del código de forma frecuente ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Un tipo especial de base de datos distribuida</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Un framework para construir interfaces de usuario</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> CI (Integración Continua) automatiza la integración y prueba del código en cada cambio. CD (Entrega/Despliegue Continuo) automatiza o facilita llevar esos cambios a producción, reduciendo errores manuales.</div></div>
+          </div>
+          <div class="cmp-card" style="margin-bottom:14px;">
+            <p style="margin:0 0 10px;font-weight:600;color:var(--text);">16. Bajo licencias Creative Commons (CC), ¿qué indica específicamente la sigla "BY"? <span class="pill fix" style="margin-left:6px;">REFUERZO</span></p>
+            <ul class="checklist" style="border:none;margin:0 0 10px;">
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">A) Que está prohibido cualquier uso comercial de la obra</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--ok);font-weight:600;">B) Que debes dar crédito/atribución al autor original al usar la obra ✓</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">C) Que no se permite modificar la obra bajo ninguna circunstancia</span></li>
+              <li style="border:none;padding:4px 0;"><span style="color:var(--text);">D) Que la obra es de dominio público total, sin ninguna condición</span></li>
+            </ul>
+            <div class="callout tip" style="margin:0;"><div><b>Por qué:</b> "BY" (Atribución) exige mencionar al autor original al usar su obra. Se combina con otras siglas como NC (no comercial) o SA (compartir bajo la misma licencia).</div></div>
           </div>
         </section>
 
