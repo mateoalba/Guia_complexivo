@@ -142,7 +142,13 @@ export default function AdminReservationsPage() {
             <TextField label="Fecha del Show"  type="datetime-local" value={showTime} onChange={(e) => setShowTime(e.target.value)} sx={{ width: 220 }} />
 
             <Button variant="contained" onClick={save}>{editId ? "Actualizar" : "Crear"}</Button>
-            <Button variant="outlined" onClick={() => { setEditId(null); setCustomerName(""); setTotal(""); setStatus(""); setShowTime(""); }}>Limpiar</Button>
+            <Button variant="outlined" onClick={() => { 
+              setEditId(null); 
+              setCustomerName(""); 
+              setTotal(""); 
+              setStatus(""); 
+              setShowTime(""); 
+              }}>Limpiar</Button>
             <Button variant="outlined" onClick={() => { load(); loadShows(); }}>Refrescar</Button>
           </Stack>
         </Stack>

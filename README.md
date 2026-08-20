@@ -1346,3 +1346,14 @@ export default function App() {
 - [ ] ¿Cada campo nuevo del formulario se agregó en los 4 lugares (`useState`, validación, reseteo, `startEdit`)?
 - [ ] ¿Las rutas de `App.tsx` coinciden EXACTO con los links/botones que navegan a ellas?
 - [ ] ¿`CORS_ALLOWED_ORIGINS` incluye todos los orígenes que vas a probar (5173, 8081)?
+
+npx expo install react-dom react-native-web 
+
+http://127.0.0.1:8000
+
+CORS_ALLOWED_ORIGINS = [
+    os.getenv("CORS_ORIGIN", "http://localhost:5173"),
+    "http://127.0.0.1:5173",
+    "http://localhost:8081",
+    "http://127.0.0.1:8081",
+]
