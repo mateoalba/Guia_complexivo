@@ -1357,3 +1357,117 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",
     "http://127.0.0.1:8081",
 ]
+
+
+## SISTEMAS OPERATIVOS — Comandos de referencia (Ubuntu)
+
+### 1. Navegación y exploración de archivos
+
+| Comando | Qué hace |
+|---|---|
+| `pwd` | Muestra la ruta de la carpeta donde estás parado ahora |
+| `ls` | Lista archivos y carpetas del directorio actual |
+| `ls -la` | Lista todo, incluyendo ocultos, con detalles (permisos, dueño, tamaño) |
+| `cd nombre_carpeta` | Entra a una carpeta |
+| `cd ..` | Sube un nivel (a la carpeta padre) |
+| `cd ~` o `cd` | Va directo a tu carpeta de usuario (home) |
+| `mkdir nombre` | Crea una carpeta nueva |
+| `rmdir nombre` | Borra una carpeta (solo si está vacía) |
+| `rm -rf nombre` | Borra carpeta y todo su contenido (¡irreversible!) |
+
+### 2. Archivos: crear, ver, mover, copiar, borrar
+
+| Comando | Qué hace |
+|---|---|
+| `touch archivo.txt` | Crea un archivo vacío |
+| `nano archivo.txt` | Abre el archivo en el editor de terminal (guardar: `Ctrl+O`, salir: `Ctrl+X`) |
+| `cat archivo.txt` | Muestra todo el contenido del archivo en pantalla |
+| `head -10 archivo.txt` | Muestra las primeras 10 líneas |
+| `tail -10 archivo.txt` | Muestra las últimas 10 líneas |
+| `cp origen destino` | Copia un archivo |
+| `mv origen destino` | Mueve o renombra un archivo |
+| `rm archivo.txt` | Borra un archivo |
+
+### 3. Permisos — `chmod`
+
+| Comando | Qué hace |
+|---|---|
+| `chmod 755 archivo` | Cambia permisos con notación numérica |
+| `chmod u+x archivo` | Agrega permiso de ejecución al dueño (`u`=user, `g`=group, `o`=others, `a`=all) |
+| `chmod g-w archivo` | Quita permiso de escritura al grupo |
+| `chown usuario archivo` | Cambia el dueño de un archivo |
+| `chown usuario:grupo archivo` | Cambia dueño y grupo a la vez |
+
+**Cómo convertir `rwx` a número — el método:**
+
+Cada letra tiene un valor fijo: `r=4`, `w=2`, `x=1`. Sumas los valores de lo que SÍ está presente en cada bloque de 3 (dueño-grupo-otros):
+
+
+
+Ejemplo: "dueño lee/escribe/ejecuta, grupo lee/ejecuta, otros solo leen" → `7-5-4` → `chmod 754`
+
+**Permisos especiales (4 dígitos — primer dígito extra):**
+
+| Dígito | Nombre | Qué hace |
+|---|---|---|
+| `4` | setuid | El programa se ejecuta con permisos del dueño, no de quien lo corre |
+| `2` | setgid | Archivos nuevos creados heredan el grupo de la carpeta |
+| `1` | sticky bit | En carpeta con escritura para todos, cada quien solo borra sus propios archivos |
+
+- *"heredar el grupo de la carpeta"* → setgid → `chmod 2775`
+- *"nadie puede borrar archivos ajenos"* → sticky bit → `chmod 1777`
+
+**`umask` — funciona AL REVÉS (resta del máximo por defecto):**
+
+
+
+### 4. Buscar cosas
+
+| Comando | Qué hace |
+|---|---|
+| `grep "texto" archivo` | Busca una palabra dentro del contenido de un archivo |
+| `grep -r "texto" carpeta/` | Busca dentro de todos los archivos de una carpeta (recursivo) |
+| `find /ruta -name "*.log"` | Busca archivos por nombre/patrón, recorriendo carpetas |
+| `cat archivo \| wc -l` | Cuenta cuántas líneas tiene un archivo (con pipe) |
+
+### 5. Procesos y sistema
+
+| Comando | Qué hace |
+|---|---|
+| `ps aux` | Lista todos los procesos corriendo, con su uso de recursos |
+| `top` | Muestra procesos en tiempo real (interactivo) |
+| `kill PID` | Termina un proceso por su número de identificación |
+| `kill -9 PID` | Fuerza la terminación de un proceso que no responde |
+| `df -h` | Muestra espacio de disco disponible |
+| `free -m` | Muestra memoria RAM disponible/usada |
+
+### 6. Usuarios y grupos
+
+| Comando | Qué hace |
+|---|---|
+| `useradd nombre` | Crea un usuario nuevo |
+| `passwd nombre` | Establece o cambia la contraseña de un usuario |
+| `groupadd nombre` | Crea un grupo nuevo |
+| `usermod -aG grupo usuario` | Agrega un usuario a un grupo |
+
+### 7. Compresión y empaquetado
+
+| Comando | Qué hace |
+|---|---|
+| `tar -cvf paquete.tar carpeta/` | Empaqueta (sin comprimir) |
+| `tar -xvf paquete.tar` | Extrae un paquete `.tar` |
+| `tar -czvf paquete.tar.gz carpeta/` | Empaqueta Y comprime con gzip a la vez |
+| `tar -xzvf paquete.tar.gz` | Extrae un paquete comprimido `.tar.gz` |
+
+> Truco: `c`=crear, `x`=extraer, `v`=verbose, `z`=gzip, `f`=nombre de archivo después.
+
+### 8. Servicios y red
+
+| Comando | Qué hace |
+|---|---|
+| `systemctl status nombre` | Ver el estado de un servicio (ej. `postgresql`, `mongod`) |
+| `systemctl start nombre` | Iniciar un servicio |
+| `systemctl stop nombre` | Detener un servicio |
+| `systemctl enable nombre` | Hacer que el servicio arranque solo con el sistema |
+| `ping direccion_ip` | Verifica conectividad con otro equipo de la red |
+| `ip addr` | Muestra tu propia dirección IP |
